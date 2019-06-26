@@ -6,8 +6,6 @@
     <description>Recent content in Posts on Miao&amp;Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
-    <managingEditor>charlie_cc@foxmail.com (Miao)</managingEditor>
-    <webMaster>charlie_cc@foxmail.com (Miao)</webMaster>
     <copyright>This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.</copyright>
     <lastBuildDate>Wed, 26 Jun 2019 14:35:31 +0800</lastBuildDate>
     
@@ -18,7 +16,7 @@
       <title>猫</title>
       <link>https://charliemini.github.io/post/%E7%8C%AB/</link>
       <pubDate>Wed, 26 Jun 2019 14:35:31 +0800</pubDate>
-      <author>charlie_cc@foxmail.com (Miao)</author>
+      
       <guid>https://charliemini.github.io/post/%E7%8C%AB/</guid>
       <description>汤姆</description>
     </item>
@@ -27,7 +25,7 @@
       <title>GO学习笔记</title>
       <link>https://charliemini.github.io/post/go%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</link>
       <pubDate>Tue, 25 Jun 2019 18:53:09 +0800</pubDate>
-      <author>charlie_cc@foxmail.com (Miao)</author>
+      
       <guid>https://charliemini.github.io/post/go%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</guid>
       <description>GO学习笔记 结构化程序 每个程序都由pkg的概念组成，必须在源代码里非注释的第一行致指明这个文件属于哪一个包,注意包的名字都要用小写字母。
 package main
