@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <url>
+    <loc>https://charliemini.github.io/</loc>
+    <lastmod>2019-06-26T14:35:31+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://charliemini.github.io/post/</loc>
+    <lastmod>2019-06-26T14:35:31+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://charliemini.github.io/post/%E7%8C%AB/</loc>
+    <lastmod>2019-06-26T14:35:31+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://charliemini.github.io/post/go%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</loc>
+    <lastmod>2019-06-25T18:53:09+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://charliemini.github.io/categories/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://charliemini.github.io/tags/</loc>
+    <priority>0</priority>
+  </url>
+  
+</urlset>
