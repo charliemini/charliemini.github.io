@@ -1,0 +1,616 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+      <title>Miao&amp;Blog on Miao&amp;Blog </title>
+      <generator uri="https://gohugo.io">Hugo</generator>
+    <link>https://charliemini.github.io/</link>
+    <language>zh</language>
+    
+    <copyright>This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.</copyright>
+    <updated>Tue, 25 Jun 2019 18:53:09 CST</updated>
+    
+    <item>
+      <title>GO学习笔记</title>
+      <link>https://charliemini.github.io/post/go%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Tue, 25 Jun 2019 18:53:09 CST</pubDate>
+      
+      <guid>https://charliemini.github.io/post/go%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</guid>
+      <description>
+
+&lt;h1 id=&#34;go学习笔记&#34;&gt;GO学习笔记&lt;/h1&gt;
+
+&lt;h2 id=&#34;结构化程序&#34;&gt;结构化程序&lt;/h2&gt;
+
+&lt;p&gt;每个程序都由pkg的概念组成，必须在源代码里非注释的第一行致指明这个文件属于哪一个包,注意包的名字都要用小写字母。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;package main&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;标准库&#34;&gt;标准库&lt;/h2&gt;
+
+&lt;p&gt;重定义包名&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;import fm &amp;quot;fmt&amp;quot;&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;如果导入了一个没有使用的包会报错&lt;/p&gt;
+
+&lt;h2 id=&#34;类型&#34;&gt;类型&lt;/h2&gt;
+
+&lt;p&gt;结构化的类型以nil作为默认值&lt;/p&gt;
+
+&lt;h2 id=&#34;常量&#34;&gt;常量&lt;/h2&gt;
+
+&lt;p&gt;用const定义，用于存储不会改变的数据线，只能是布尔型、数字和字符串。&lt;/p&gt;
+
+&lt;p&gt;支持显、隐式类型定义&lt;/p&gt;
+
+&lt;h2 id=&#34;变量&#34;&gt;变量&lt;/h2&gt;
+
+&lt;p&gt;用&lt;code&gt;var&lt;/code&gt;关键字声明变量 &lt;code&gt;var identifier type&lt;/code&gt; OR &lt;code&gt;var identifier type = value&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;当变量被声明后，系统自动赋予它该类型的零型，所有的内存在go中都是经过初始化的。变量命名规则遵循驼峰法。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;如果希望全局变量被外部包使用，则需要将首个单词字母大写&lt;/strong&gt;*。&lt;/p&gt;
+
+&lt;p&gt;在函数体内部初始化声明变量时可以使用简短的语法：&lt;code&gt;a := 1&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;声明局部变量而不去使用它同样会出现编译错误&lt;/p&gt;
+
+&lt;p&gt;使用等于号进行变量间的相互赋值时，只是引用了同一个地址指针。&lt;/p&gt;
+
+&lt;p&gt;如果想要交换两个文明变量的值，可以使用&lt;code&gt;a,b = b,a&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;_&lt;/code&gt; 被当作一个只写变量&lt;/p&gt;
+
+&lt;p&gt;全局变量除了可以在全局声明中初始化，也可以在&lt;code&gt;init&lt;/code&gt;函数中初始化,也就是在声明的全局变量，可以经由&lt;code&gt;init&lt;/code&gt; 函数更改赋值并作用于整个程序作用域。&lt;/p&gt;
+
+&lt;h2 id=&#34;基本类型与运算符&#34;&gt;基本类型与运算符&lt;/h2&gt;
+
+&lt;p&gt;GO是强类型语言，只支持显示转换，所以只有类型严格相同时才可以做运算操作。&lt;/p&gt;
+
+&lt;p&gt;不允许不同类型之间的混合使用，但允许和常量之间的混合使用。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func main(){
+	var a int
+	var b int 16
+	a = 1
+	b = a + a // 错误
+	b = b + 5 
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;格式化字符串：%d用于格式化字符串&lt;/p&gt;
+
+&lt;p&gt;​                           %x，%X用于格式化16进制表示的数字&lt;/p&gt;
+
+&lt;p&gt;​                           %g用于格式化浮点数（%f输出浮点数，%e输出科学计数表示法）&lt;/p&gt;
+
+&lt;p&gt;​                            %0d用于输出定长的整数&lt;/p&gt;
+
+&lt;p&gt;​                           %n.mg用于表示数字n并精确到小数点后m位，g还可以替换为e，f&lt;/p&gt;
+
+&lt;p&gt;在算数运算时溢出并不会产生错误，只会将超出的位数抛弃。对于产出范围的有理数可以使用标准库中的&lt;code&gt;big&lt;/code&gt;包&lt;/p&gt;
+
+&lt;p&gt;为了简化名称和解决名称冲突，可以使用类型别名。&lt;code&gt;type A int&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;GO字符串中字符为ASCII时占用一个字节，其它字符根据需要占据2-4个字节。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;strings&lt;/code&gt;包&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;strings.HasPrefix(s, string) bool 判断s是否以string开头&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;strings.HasSuffix(s, string) bool 判断s是否以string结尾&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;strings.Contains(s, string) bool 判断字符串s是否包含string&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;strings.Index(s, string) int 返回字符串string在s中第一个匹配的索引，返回-1表示不存在&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;strings.LastIndex(s, string) int返回字符串string在s中最后一个匹配的索引，返回-1表示不存在&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;对于非ASCII编码的ch，建议使用strings,IndexRune定位                            strings.IndexRune(s, ch) int&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;strings.Replace(s, old, new, n) string 字符替换，n表示替换前几个字符，n=-1表示全替换&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;strings.Count(s, string) int 计算string在s中出现的非重叠次数。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;strings.Repeat(s, count int) string 返回count次重复字符串s的的心字符串&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;strings.ToLower(s) string 转化为小写字符&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;strings.ToUpper(s) string 转化大写字符&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;strings.TrimSpace(s, &amp;ldquo;&amp;rdquo;) 剔除字符串s开头结尾指定字符&lt;/p&gt;
+
+&lt;p&gt;strings.TrimLeft()&lt;/p&gt;
+
+&lt;p&gt;strings.TrimRight()&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;string.Fields(s, sep) 切割字符串，返回slice&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;string.Join(sl []string, sep string) string 将字符串数组用字符sep拼接&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;String.NewReader(str) 用于生成一个reader并读取字符串中的内容，并返回指向该reader的指针。&lt;/p&gt;
+
+&lt;p&gt;Read() —&amp;gt; byte&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;code&gt;strconv&lt;/code&gt;包&lt;/p&gt;
+
+&lt;p&gt;用于字符串相关的类型转换。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;strconv.Atoi(s string) (i int, err error)&lt;/code&gt; 将字符串转换为 int 型。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;strconv.IntSize&lt;/code&gt; 获取程序运行的操作系统下int所占位数。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;sync&lt;/code&gt;包，互斥锁。&lt;/p&gt;
+
+&lt;h2 id=&#34;指针&#34;&gt;指针&lt;/h2&gt;
+
+&lt;p&gt;无法得到常量的地址&lt;/p&gt;
+
+&lt;p&gt;对于一个空指针的反向引用是不合法的&lt;/p&gt;
+
+&lt;h2 id=&#34;控制结构&#34;&gt;控制结构&lt;/h2&gt;
+
+&lt;p&gt;不要同时在if-else结构的两个分支里都使用return语句，会导致程序编译错误。(GO1.1 已修复)&lt;/p&gt;
+
+&lt;p&gt;Runtime.GOOS 是常量，是程序运行的操作系统类型。&lt;/p&gt;
+
+&lt;p&gt;if 可以包含初始化语句&lt;code&gt;if a := 10; a &amp;gt; number&lt;/code&gt; 这种方式定义的变量a只存在于if语句的作用域中。&lt;/p&gt;
+
+&lt;p&gt;switch中，如果在命中case后还希望执行下面的case，可以使用&lt;code&gt;fallthrough&lt;/code&gt;关键字。&lt;/p&gt;
+
+&lt;p&gt;Go里的for循环和C一样，但存在一个for-range结构，可以迭代任何一个集合.     &lt;code&gt;for pos,char := range str&lt;/code&gt;  pos为索引位置，char为值。&lt;/p&gt;
+
+&lt;p&gt;For,    switch,     select语句都可以配合标签使用。&lt;/p&gt;
+
+&lt;h2 id=&#34;函数&#34;&gt;函数&lt;/h2&gt;
+
+&lt;p&gt;用&lt;code&gt;func&lt;/code&gt;定义函数，函数体用{}括起来&lt;/p&gt;
+
+&lt;p&gt;main函数没有参数，也没有返回类型&lt;/p&gt;
+
+&lt;p&gt;Go不允许进行函数重载，函数可以以声明的方式被使用，不需要函数体。&lt;/p&gt;
+
+&lt;p&gt;返回多个非命名返回值时，需要在函数头事先用（）括起返回类型，尽量不要使用非命名返回值。&lt;/p&gt;
+
+&lt;p&gt;在go中存在变参函数，类似于python中的*args，在传参中使用&lt;code&gt;name ...type&lt;/code&gt;的形式，可以传递多个同类型的参数形式。如果不确定变长参数的类型或者变长参数存在多种类型的时候，可以用默认的空接口&lt;code&gt;interface{}&lt;/code&gt;代替type。&lt;/p&gt;
+
+&lt;p&gt;Go允许自己定义结构类型,其中可以混合多种变量类型.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-Go&#34;&gt;type struct_name struct{
+	part1 int,
+	part float,
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;关键字defer在函数中被使用的时候，会在程序将要返回时执行，它类似栈，如果有多个defer会从最后面的开始执行。它允许我们进行一些&amp;rdquo;收尾&amp;rdquo;工作，比如关闭文件流，打印，解锁，关闭数据库，实现代码追踪。&lt;/p&gt;
+
+&lt;p&gt;在大量的递归调用中可能会发生栈溢出的问题，也就是栈资源耗尽。&lt;/p&gt;
+
+&lt;p&gt;匿名函数无法单独存在，但可以赋值给一个变量，func 关键字必须紧贴着第一个括号。这类似闭包，闭包可以看作是函数与外部变量的组合体，外部变量和函数一直存在。闭包避免了使用全局变量，将数据与函数紧密结合。&lt;/p&gt;
+
+&lt;h2 id=&#34;数组&#34;&gt;数组&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;var identifier [len]type&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;当数组还未定义时，可以使用make方法定义切片&lt;code&gt;var slice1 []type = make([]type, len)&lt;/code&gt;  简写为&lt;code&gt;slice1 := make([]type, len)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;对于&lt;code&gt;[]byte&lt;/code&gt;进行切片要使用bytes包，&lt;code&gt;var buffer bytes.Buffer&lt;/code&gt;                       &lt;code&gt;var r *bytes.Buffer = new(bytes.Buffer)&lt;/code&gt; 利用buffer.WriteString(s)的方法拼接内容比使用 &lt;code&gt;+=&lt;/code&gt; 更省内存和cpu。&lt;/p&gt;
+
+&lt;p&gt;遍历数组和切片可以使用 for-range 结构，返回数组索引和value。&lt;/p&gt;
+
+&lt;p&gt;append方法可以实现对切片元素的增加，切片的拼接。&lt;/p&gt;
+
+&lt;h2 id=&#34;map&#34;&gt;map&lt;/h2&gt;
+
+&lt;p&gt;map对应的数据结构时字典。声明&lt;code&gt;var mapname map[keytype]valuetype&lt;/code&gt;                          初始化 &lt;code&gt;map1 := make(map[keytype]valuetype)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;map传递给函数的代价很小，因为是用key传递的，而key在32位机器上占32个字节，在64位机器上占8个字节。map不要用new方法去声明，因为new方法如果错误使用的话，会创建一个空饮用的指针，所以最好一直用make创建map。map容量可以定义，超过容量会自动增加对应空间。&lt;/p&gt;
+
+&lt;h2 id=&#34;自定义包&#34;&gt;自定义包&lt;/h2&gt;
+
+&lt;p&gt;import格式： import &amp;ldquo;包的路径/url地址&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;主程序要利用的包必须要在主程序编译之前被编译完成。当时用&lt;code&gt;.&lt;/code&gt;来做倒入包的别名时，可以不通过包名来使用其中的项目，否则都要使用&lt;code&gt;packgename.function&lt;/code&gt;的形式来使用。可以使用&lt;code&gt;go install packagename&lt;/code&gt;的命令将洗定义的包编译安装到本地环境。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>如何判断http链接文件日期</title>
+      <link>https://charliemini.github.io/post/%E5%A6%82%E4%BD%95%E5%88%A4%E6%96%ADhttp%E9%93%BE%E6%8E%A5%E6%96%87%E4%BB%B6%E6%97%A5%E6%9C%9F/</link>
+      <pubDate>Wed, 14 Feb 2018 16:30:31 CST</pubDate>
+      
+      <guid>https://charliemini.github.io/post/%E5%A6%82%E4%BD%95%E5%88%A4%E6%96%ADhttp%E9%93%BE%E6%8E%A5%E6%96%87%E4%BB%B6%E6%97%A5%E6%9C%9F/</guid>
+      <description>&lt;p&gt;##last-modified
+请求响应头里的参数（利用requests获取到的HEAD可以看作是字典），记录最近一次文件修改时间。
+##ETag 实体标签
+HTTP1.1中加入的属性，用来帮助服务器控制Web端的缓存验证。&lt;/p&gt;
+
+&lt;p&gt;原理：当浏览器请求服务器的某项资源(A)时, 服务器根据A算出一个哈希值并通过 ETag 返回给浏览器，浏览器把这个哈希值 和 A 同时缓存在本地，当下次再次向服务器请求A时，会通过类似 If-None-Match: &amp;ldquo;3f80f-1b6-3e1cb03b&amp;rdquo; 的请求头把ETag发送给服务器，服务器再次计算A的哈希值并和浏览器返回的值做比较，如果发现A发生了变化就把A返回给浏览器(200)，如果发现A没有变化就给浏览器返回一个304未修改。这样通过控制浏览器端的缓存，可以节省服务器的带宽，因为服务器不需要每次都把全量数据返回给客户端。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Git学习</title>
+      <link>https://charliemini.github.io/post/git%E5%AD%A6%E4%B9%A0/</link>
+      <pubDate>Wed, 03 Jan 2018 22:23:22 CST</pubDate>
+      
+      <guid>https://charliemini.github.io/post/git%E5%AD%A6%E4%B9%A0/</guid>
+      <description>
+
+&lt;h1 id=&#34;git的学习笔记&#34;&gt;GIT的学习笔记&lt;/h1&gt;
+
+&lt;p&gt;这是我初学GIT时记录下的笔记，很多地方都记录的不详细（毕竟我只是怕忘记了又要去查才简要记录了一点），并不足以参考，若想学习Git，请移步到下面网址：&lt;/p&gt;
+
+&lt;p&gt;浅显易懂完整的GIT学习教程在这里&lt;br /&gt;
+&lt;a href=&#34;https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000&#34;&gt;廖雪峰的官方网站-Git教程&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;#Git的概念
+简单来说，Git的工作流程很简单，我们把整个过程中文件的转移分为3个区域：工作区，暂存区，分支。&lt;/p&gt;
+
+&lt;p&gt;工作区就是我们对文件进行操作的地方，比如你在本地GIt仓库修改文件，编写代码的文件存储空间。现在你的文件改好了，想把它提交到Git仓库中，先要把它提交到暂存区，最后再提交到分支。默认的分支为master，也可以自己创建分支。这样文件就被保存到Git仓库里了。
+&lt;img src=&#34;http://upload-images.jianshu.io/upload_images/7954818-265ebaec16940816?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240&#34; alt=&#34;image&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;本地git仓库&#34;&gt;本地Git仓库&lt;/h2&gt;
+
+&lt;p&gt;进入一个文件夹， &lt;code&gt;git init&lt;/code&gt; 新建一个git仓库a&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git add &amp;lt;filename&amp;gt;&lt;/code&gt; 将文件添加到到暂存区&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git commit -m &#39;xxx&#39;&lt;/code&gt; 将文件提交到分支，参数-m后面写上对本次提交的说明，最好写上&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git status&lt;/code&gt; 显示仓库当前状态&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git diff&lt;/code&gt; 查看各版本文件的不同，显示的格式为Unix通用的diff格式&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git log&lt;/code&gt; 显示时间最近到最远的提交版本的详细信息，加上参数 &lt;code&gt;--pretty-- oneline&lt;/code&gt; 显示简要信息，其中有版本号&lt;/p&gt;
+
+&lt;p&gt;在Git中，&lt;code&gt;HEAD&lt;/code&gt; 表示当前版本，上一版本为 &lt;code&gt;HEAD^&lt;/code&gt;，上上一版本为 &lt;code&gt;HEAD^&lt;/code&gt; 或 &lt;code&gt;HEAD~2
+&lt;/code&gt;，以此类推。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git reset --hard HEAD&lt;/code&gt; 将文件重置为上一个版本，也可通过版本好重置： &lt;code&gt;git reset --hard 版本号&lt;/code&gt; 版本号只需打出足够辨识的前几位&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git reflog&lt;/code&gt; 显示出每一历史命令&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git diff HEAD -- &amp;lt;filename&amp;gt;&lt;/code&gt; 查看最新版本库与工作区文件的区别&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git checkout -- &amp;lt;filename&amp;gt;&lt;/code&gt; 撤销文件在工作区的修改（尚未提交到分支）回到最近一次&lt;code&gt;add&lt;/code&gt;或&lt;code&gt;commit&lt;/code&gt;是的状态&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git reset Head &amp;lt;filename&amp;gt;&lt;/code&gt; 撤销暂存区修改，放回工作区&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git rm &amp;lt;filename&amp;gt;&lt;/code&gt; 从版本中删除文件，要&lt;code&gt;commit&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;##连接远程库
+我这里以Github为例&lt;/p&gt;
+
+&lt;p&gt;创建SSH key（本地库与远程库关联的密钥）&lt;/p&gt;
+
+&lt;p&gt;在shell中输入&lt;code&gt;ssh-keygen -t rsa -C &#39;youremail@example.com&#39;&lt;/code&gt;,再在github用户功能下，添加进去密钥，建议添加id+rsa.pub的内容&lt;/p&gt;
+
+&lt;p&gt;关联github上的git仓库，先创建一个仓库，然后在本地仓库执行命令：
+    &lt;code&gt;git remote add origin git@github.com:&amp;lt;github账户&amp;gt;/&amp;lt;仓库名&amp;gt;.git&lt;/code&gt; 这样就关联成功了&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git push -u origin master&lt;/code&gt;  把本地库的master推送到github的远程库上，第一次推送加上参数-u，还会把本地的maste分支和远程的master分支关联起来，以后就可以只用 &lt;code&gt;git push origin master&lt;/code&gt; 推送就行了&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git clone git@github.com:&amp;lt;github账户&amp;gt;/&amp;lt;远程库名&amp;gt;.git&lt;/code&gt;    将远程库克隆到本地&lt;/p&gt;
+
+&lt;p&gt;##分支
+分支让我们跟方便的管理项目，比如一个项目正式的发布版本在master分支上，那我们不可能在master上直接改，出差错了怎么办。一般都会创建一个新分支，比如分支branch1，作为项目发布前的主分支。项目组的工作人员在没人创建一个分支Mybranch，以branch1为模板，各自写自己负责的代码，在合并到branch1上，测试通过后，再把branch1合并到master上。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git checkout -b &amp;lt;分支名&amp;gt;&lt;/code&gt;  创建并切换分支，相当于两条命令：&lt;code&gt;git branch xx&lt;/code&gt; ;&lt;code&gt;git checkout xxx&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git branch&lt;/code&gt;  查看当前所有分支 ，*会出现在当前所在分支前&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git merge xx&lt;/code&gt;  将xx分支合并到当前分支上（这样会采用Fast forward 模式，这种模式删除分支后会丢掉分支信息）&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git merge --no-ff -m &#39;xxx&#39; 分支名&lt;/code&gt;   用&amp;ndash;no-ff 参数禁用fast froward&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git branch -d xx&lt;/code&gt;  删除xx分支   若加上参数&lt;code&gt;-D&lt;/code&gt;表示强行删除&lt;/p&gt;
+
+&lt;p&gt;如果master和别的分支都分别有新的提交，git无法快速合并，只能试图将各自的修改合并起来，但可能会引起冲突，必须手动解决冲突再提交。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git log --graph&lt;/code&gt;  显示分支合并图&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git stash&lt;/code&gt;  保存当前未提交的改动。如果你得为你的项目新加一个功能，在你的分支上代码写了一半了，结果项目中发现了一个bug,你必须马上解决。可你又无法提交你现在改动的项目（因为还未完成），这个时候你可已选择保存它，回到未改动前的版本，解决了bug再回来继续写完它。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git satsh list&lt;/code&gt;  显示保存的工作现场&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git satsh apply&lt;/code&gt;  恢复，但是恢复后stash内容并不删除，需要用&lt;code&gt;git satsh drop&lt;/code&gt;来删除&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git satsh pop&lt;/code&gt; 恢复工作现场的同时把stash的内容也删除了&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git remote -v&lt;/code&gt;查看远程库信息，参数&lt;code&gt;-V&lt;/code&gt; 显示更详细的信息&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git checkout -b dev origin/dev&lt;/code&gt; 创建远程的dev分支到本地&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git pull&lt;/code&gt; 得到当前分支的最新提交&lt;/p&gt;
+
+&lt;p&gt;如果&lt;code&gt;git pull&lt;/code&gt;提示“no tracking information”，则说明本地分支和远程分支的链接关系没有创建，用命令&lt;code&gt;git branch --set-upstream branch-name origin/branch-name&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;##标签
+Git的标签虽然是版本库的快照，但其实它就是指向某个&lt;code&gt;commit&lt;/code&gt;的指针，方便人们查找&lt;/p&gt;
+
+&lt;p&gt;切换到需要打标签的分支上，&lt;code&gt;git tag &amp;lt;branch-name&amp;gt;&lt;/code&gt;打上标签，like:&lt;code&gt;git tag v1m&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;默认标签打在最新提交的&lt;code&gt;commit&lt;/code&gt;上，若想打在之前的&lt;code&gt;commit&lt;/code&gt;上，就要找到那个&lt;code&gt;commit&lt;/code&gt;的id，然后
+&lt;code&gt;git tag  &amp;lt;tagname&amp;gt; &amp;lt;commit id&amp;gt;&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git tag&lt;/code&gt; 查看所有标签 标签按字母顺序排序，而非创立的时间顺序&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git show &amp;lt;tagname&amp;gt;&lt;/code&gt; 查看某一标签的具体信息&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git tag -a &amp;lt;tagname&amp;gt; -m &#39;xx&#39;&lt;/code&gt; 创建带说明的标签&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git tag -d &amp;lt;tagname&amp;gt;&lt;/code&gt; 删除（本地）标签&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git push origin &amp;lt;tagname&amp;gt;&lt;/code&gt;  推送某个标签到远程&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git push origin --tags&lt;/code&gt; 推送全部尚未推送到远程的本地标签&lt;/p&gt;
+
+&lt;p&gt;若要删除已推送到远程的标签，先删除本地标签，再删除远程标签，删除远程库上的标签：
+&lt;code&gt;git push origin :refs/tags/&amp;lt;tagname&amp;gt;&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;##注意事项
+&lt;code&gt;git rm --cache submodule_name&lt;/code&gt; 删除子模组&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git branch --set-upstream-to=origin/dev dev&lt;/code&gt;  关联远程分支&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Mysql主从复制</title>
+      <link>https://charliemini.github.io/post/mysql%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
+      
+      <guid>https://charliemini.github.io/post/mysql%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/</guid>
+      <description>
+
+&lt;h2 id=&#34;原理&#34;&gt;原理&lt;/h2&gt;
+
+&lt;p&gt;mysql 支持以binglog日志的形式支持主从数据库同步备份。在5.7版本之前，会以一个io线程读取binlog日志，一个sql线程执行主库sql的形式执行。在5.7之后，mysql支持多线程备份，有两种模式，一种是一个库一个线程，另一种是一个库多个线程，但要支持这种多线程备份，数据表结构必须升级成5.7版本的。&lt;/p&gt;
+
+&lt;p&gt;##环境&lt;/p&gt;
+
+&lt;p&gt;数据库版本：5.1.73
+系统版本：Centos 6.5&lt;/p&gt;
+
+&lt;p&gt;##实现步骤
+(1) 配置主库参数
+&lt;code&gt;vim  /etc/my.cnf&lt;/code&gt;
+在文件的[mysqld]标题下加入&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;server-id = 1            #id要唯一 
+log-bin = mysql-bin      #开启binlog日志
+relay_log_purge=1
+#binlog-do-db=IP_data     #需要同步的数据库名，如果有多个数据库，可重复此参数，每个数据库一行
+#binlog-ignore-db=mysql   #忽略同步的数据库
+#上述两项可能使主从数据库存在失误，建议全纪录日志,而在从库设置
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;重启数据库
+&lt;code&gt;service mysqld restart&lt;/code&gt;
+(2)主库创建同步账号&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-mysql&amp;gt;&#34;&gt;(3)配置从库参数
+`vim  /et/my.cnf`
+在文件的[mysqld]标题下加入
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;server-id = 3                           #这个设置大于1，且不能于其它从库相同
+log-bin = mysql-bin                     #开启binlog日志
+#replicate-do-db= IP_data               #备份数据库名
+#replicate-ignore-db=mysql              #忽略备份的数据库名
+replicate-wild-do-table = database.%    #设置备份数据库里所有表，更稳定
+replicate-wild-ignore-table = mysql.%
+read_only=1                         #设置只读&lt;br /&gt;
+auto-increment-increment = 1        #这两个参数在Ubuntu系统中MySQL5.5以后都已经默认是1
+auto-increment-offset = 1          #避免两台服务器同时做更新时自增长字段的值之间发生冲突
+slave-skip-errors = all     #跳过主从复制出现的错误
+log_slave_updates = 1     #开启从库的binlog日志&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;(4)备份主库
+方法一
+`mysqldump -uroot -pxxxx --rutineso --skip-lock-tables --single-transaction --flush-logs --hex-blob --master-data=2 --database dbname &amp;gt; db.sql`
+
+参数说明：
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;–routines：导出存储过程和函数
+–skip-lock-tables：不锁表
+–single_transaction：导出开始时设置事务隔离状态，并使用一致性快照开始事务。
+–master-data：默认等于1，将dump起始(change master to)binlog点和pos值写到结果中，等于2是将change master to写到结果中并注释&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;方法二
+` mysqldump -h IP -uusername -pxxxxx -B db1 db2 db3 ....   -e --max_allowed_packet=4194304 --net_buffer_length=16384 --skip-lock-tables --single-transaction --flush-logs --hex-blob --master-data=2 &amp;gt;backup.sql`
+
+(5)将sql文件导入从库
+`create database dbname`
+`mysql -uroot -pxxx dbname&amp;lt;db.sql`
+
+如果导入途中出现`Repair by sorting`太慢的问题，可能是某个表太大了，默认的磁盘空间不够。需要事先设置配置文件：
+`myisam_max_sort_file_size=xxG`     这个值根据需求设置 
+
+(6)从库设置从musqldump的时间点导入日志
+可以通过下面这个命令查看
+`show master STATUS`
+得到： ![1539312278(1).png](https://upload-images.jianshu.io/upload_images/7954818-24c3c33edea0b0af.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+然后在从库执行：
+` change master to master_host=&#39;IP&#39;, master_user=&#39;mysqlcopy&#39;, master_password=&#39;XXX&#39;,  master_port=3306，master_log_file=&#39;mysql-bin.000009&#39;, master_log_pos=106;
+`
+从库开启同步：
+`start slave;`
+执行`show slave status\G;`
+看到
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Slave_IO_Running: Yes
+Slave_SQL_Running: Yes&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;就代表初步成功了
+##遇到的问题
+执行第六步的时候，发现
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Slave_IO_Running: NO
+Last_IO_Error: Got fatal error 1236 from master when reading data from binar&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;解决方法：
+先关闭同步：`stop slave;`
+然后刷新日志：`flush logs;`
+日志后缀会加1，最后从库重新同步新日志
+` change master to master_host=&#39;IP&#39;, master_user=&#39;mysqlcopy&#39;, master_password=&#39;XXX&#39;,  master_log_file=&#39;mysql-bin.000010&#39;, master_log_pos=106;
+`
+开启同步：`start slave;`
+问题得以解决
+## 附
+
+（1）清理除了正在使用的其他日志文件  `purge binary logs to &#39;mysql-tb-bin.000005&#39;;`
+
+（2）清理预设日期之前的日志 `expire_logs_days=15（天数）`
+
+（3）设置日志文件最大容量 ` max_binlog_size = 1G`
+
+###安装5.1.73
+centos：去官网下载rpm包
+               同级目录下`yum install xx`
+###安装5.7
+将源更新安装
+### 配置
+
+更改文件
+centos：`/etc/my.cnf`
+ubuntu:`/etc/mysql/mysql.conf.d/mysqld.cnf`
+`cp \var\lib\mysql 新路径`
+记得赋予权限
+关闭mysql修稿配置
+
+###mysql5.1.73
+更改存储位置
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;[client]
+#socket         = /var/lib/mysql/mysql.sock
+default-character-set=utf8
+socket=******  #新的安装路径+mysql.sock&lt;/p&gt;
+
+&lt;p&gt;[mysqld]
+#socket         = /var/lib/mysql/mysql.sock
+datadir= ****** #新的安装路径
+socket= ******&lt;/p&gt;
+
+&lt;p&gt;[mysql]
+default-character-set = utf8
+socket=******&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;###mysql5.7
+修改`/etc/mysql/mysql.conf.d/mysqld.cnf`
+`datadir= ****** #新的安装路径`
+修改`/etc/apparmor.d/usr.sbin.mysqld`
+将以下路径修改
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;allow-data-dir-access&#34;&gt;Allow data dir access&lt;/h1&gt;
+
+&lt;p&gt;/var/lib/mysql r,
+  /var/lib/mysql/** rwk,
+``&lt;code&gt;
+然后&lt;/code&gt;/etc/init.d/apparmor  restart`&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>学习记录1</title>
+      <link>https://charliemini.github.io/post/%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%951/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
+      
+      <guid>https://charliemini.github.io/post/%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%951/</guid>
+      <description>
+
+&lt;p&gt;#临界区
+临界区是一段代码，保证在多线程或其他情况下只能被一个线程执行，可以用信号量或互斥量来保护临界区。
+#堆和栈
+CPython为例，所有变量都是一个PyObject*，也就是指针，而所有赋值语句都是将一个对象的地址赋值给它，其实不光是变量，容器里面的也是，比如list和dict的元素等。
+&lt;code&gt;id([object])&lt;/code&gt; 返回对象的内存地址&lt;/p&gt;
+
+&lt;p&gt;栈(Stack)是运行时的单位，而堆(Heap)是存储的单位。
+栈解决程序的运行问题，即程序如何执行，或者说如何处理数据；
+堆解决的是数据存储的问题，即数据怎么放、放在哪儿。
+#强类型程序设计语言
+强类型的的语言就是编译器能够保证正确性，例如在C和Java中你无法在字符类型中放入数字，你只能将兼容的值存入相应的类型中。反之就是Python这样的弱类型程序设计语言，不要求在编译时进行类型检查，它们根据上下文处理值。
+#SQL注入
+一种安全漏洞，从用户哪里得到输入但不加查证去创建SQL查询的系统可能存在这种风险。
+#疏耦合
+软件设计追求的一个特性，就是指软件各模块影响程度低，修改了这个部分不会影响到另一个部分。
+#二叉查找树
+对于一个节点，它的左子树上所有的节点的值都小于或等于它的值，它的右子树上所有节点的的值都大于或等于它的值。&lt;/p&gt;
+
+&lt;h1 id=&#34;python-进程&#34;&gt;python 进程&lt;/h1&gt;
+
+&lt;p&gt;python多进程用multiprocessing模块
+multiprocessing模块的功能众多：支持子进程、通信和共享数据、执行不同形式的同步，提供了Process、Queue、Pipe、Lock等组件。&lt;/p&gt;
+
+&lt;p&gt;假设你使用的是multiprocessing的Pool，是使用多进程实现了concurrency
+from multiprocessing import Pool
+如果把这个代码改成下面这样，就变成多线程实现concurrency
+from multiprocessing.dummy import Pool
+两种方式都跑一下，哪个速度快用哪个就行了。&lt;/p&gt;
+
+&lt;p&gt;Python代码的执行由Python虚拟机（解释器）来控制。Python在设计之初就考虑要在主循环中，同时只有一个线程在执行，就像单CPU的系统中运行多个进程那样，内存中可以存放多个程序，但任意时刻，只有一个程序在CPU中运行。同样地，虽然Python解释器可以运行多个线程，只有一个线程在解释器中运行。对Python虚拟机的访问由全局解释器锁（GIL）来控制，正是这个锁能保证同时只有一个线程在运行。在多线程环境中，Python虚拟机按照以下方式执行。
+1.设置GIL。
+2.切换到一个线程去执行。
+3.运行。
+4.把线程设置为睡眠状态。
+5.解锁GIL。
+6.再次重复以上步骤。&lt;/p&gt;
+
+&lt;p&gt;对所有面向I/O的（会调用内建的操作系统C代码的）程序来说，GIL会在这个I/O调用之前被释放，以允许其他线程在这个线程等待I/O的时候运行。如果某线程并未使用很多I/O操作，它会在自己的时间片内一直占用处理器和GIL。也就是说，I/O密集型的Python程序比计算密集型的Python程序更能充分利用多线程的好处。&lt;/p&gt;
+
+&lt;p&gt;#is 和 == 的区别
+在python中对象基本包含了以下三个要素：id()（身份标识&amp;ndash;地址）、type(),value()。
+is比较的是id，而==比较的是value值。&lt;/p&gt;
+
+&lt;p&gt;在python中，定义了 [-5,256) 的整数是早已被定义在了内存池中，当引用这些对象时直接引用它们在内存池中的地址，所以id相同。而float类型并没有保存在内存池中，所以id都不相同。&lt;/p&gt;
+
+&lt;p&gt;字符串类型是因为python中有一个intern机制，将已经创建的字符串（驻留机制的字符，即不包含特殊字符）以键值对的形式（地址为值）放进一个字典中，如果在创建一个字符变量，先在这个字典中查找，如果有相同的，直接将他的地址引用。&lt;/p&gt;
+
+&lt;p&gt;#为什么python中没有重载
+重载是为了什么：
+&lt;strong&gt;1.改变参数类型&lt;/strong&gt;
+&lt;strong&gt;2.改变参数个数&lt;/strong&gt;
+对于第一个目的，python可以接受任何类型的参数，不存在问题
+对于第二个目的，python可以使用缺省参数（缺省参数即是调用该函数时，缺省参数的值若未被传入，则传入默认预设的值）
+所以python也就不需要重载了&lt;/p&gt;
+
+&lt;p&gt;#单例模式
+保证系统中的一个类只有一个实例且易于外界访问，方便控制实例个数和节约资源。
+&lt;strong&gt;python中模块就是天然的单例模式&lt;/strong&gt;
+当第一次导入一个模块时，会创建一个.pyc文件，之后再次导入直接加载这个.pyc文件，而不会去执行该模块代码。所以只需把相应的函数和变量放到一个模块中，就能产生一个单例对象。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#single.py
+class singlemoudle(object):
+    def func(self):
+        pass
+
+mysingle = singlemoudle()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;#main.py
+from single import mysingle
+
+mysingle.func()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;使用&lt;strong&gt;new()&lt;/strong&gt;方法&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;class singlemoudle(object):
+    _isexist = None
+    def __new__(cls, *args, **kwards):
+        if not _isexist:
+            cls._isexist = super(singlemoudle, cls).__new__(cls, *args, *kwards)
+        return cls._isexist
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
