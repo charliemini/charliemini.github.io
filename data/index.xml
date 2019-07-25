@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Data on Miao&amp;Blog</title>
+    <link>https://charliemini.github.io/data/</link>
+    <description>Recent content in Data on Miao&amp;Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.</copyright>
+    <lastBuildDate>Thu, 11 Jul 2019 15:02:52 +0800</lastBuildDate>
+    
+	<atom:link href="https://charliemini.github.io/data/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Python绘图</title>
+      <link>https://charliemini.github.io/data/python%E7%BB%98%E5%9B%BE/</link>
+      <pubDate>Thu, 11 Jul 2019 15:02:52 +0800</pubDate>
+      
+      <guid>https://charliemini.github.io/data/python%E7%BB%98%E5%9B%BE/</guid>
+      <description>matplotlib 在matplotlib种，整个图像为一个figure对象，而在这个figure对象中包含一个或多个axes对象，每个axes对象都是一个拥有自己坐标系的绘图区域。
+fig,axes = plt.subplots(nrows, ncols) 接收行列数，返回一个figure对象和axes对象。
+axes.set_ylim 设置y轴区间
+plt.plot
+plt.xticks(roartion=90) 图横坐标标注旋转90度
+plt.xlabel()
+plt.ylabel()
+Plt.title()
+plt.figure(figsize=(6,6))定义长宽属性的画布
+seaborn 核密度估计 核密度估计（KDE），也叫非参数估计方法，即对数据分布不添加任何假定条件，直接从数据样本本身研究数据分布特征。
+seaborn.kdeplot()
+而seaborn.distlpot()集成了matplotlib的直方图方法hist() 与kdeplot 方法。
+调色板 seaborn.color_palette() 允许传入任何matplotlib制定有效的颜色数组，返回一个可供使用的RGB元祖列表。
+color_palette(&amp;quot;hls&amp;quot;, 8) 使用hls颜色区域定义8种颜色. color_palette(&amp;quot;paired&amp;quot;, 8) 定义8种颜色，每两个一对，颜色相近。
+coloir_palette(&amp;quot;Blues&amp;quot;) 还可以传进来一个颜色名称，定义一个渐变色的调色板，默认是8个，渐变是由浅至深，要想变成有深至浅反过来在传参后面加上_r
+散点图 热力图 seaborn.heatmap(data, vmin=None, vmax=None, cmap=None, center=None, robust=False, annot=None, fmt=&#39;.2g&#39;, annot_kws=None, linewidths=0, linecolor=&#39;white&#39;, cbar=True, cbar_kws=None, cbar_ax=None, square=False, xticklabels=&#39;auto&#39;, yticklabels=&#39;auto&#39;, mask=None, ax=None, **kwargs)
+重要的参数：data是数据源，可以是一个二维数组。
+​ cannot = True 则展示单元格数字
+​ cmap 是指色彩颜色的选择
+分类柱形图 seaborn.barplot(x=None, y=None, data=None)</description>
+    </item>
+    
+  </channel>
+</rss>
