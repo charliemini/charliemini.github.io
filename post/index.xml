@@ -18,9 +18,7 @@
       <pubDate>Mon, 22 Jul 2019 11:22:58 +0800</pubDate>
       
       <guid>https://charliemini.github.io/post/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95-%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/</guid>
-      <description>&lt;h1 id=&#34;机器学习算法-随机&#34;&gt;机器学习算法-随机&lt;/h1&gt;
-
-&lt;h2 id=&#34;随机森林&#34;&gt;随机森林&lt;/h2&gt;
+      <description>&lt;h2 id=&#34;随机森林&#34;&gt;随机森林&lt;/h2&gt;
 
 &lt;p&gt;随机森林是监督学习的一种，是基于多个决策树生成的，所以先要理解决策树。&lt;/p&gt;</description>
     </item>
@@ -31,9 +29,7 @@
       <pubDate>Fri, 12 Jul 2019 14:21:45 +0800</pubDate>
       
       <guid>https://charliemini.github.io/post/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E7%AC%94%E8%AE%B0/</guid>
-      <description>&lt;h1 id=&#34;数据处理&#34;&gt;数据处理&lt;/h1&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;数据分析最主要的是数据，数据是分析的基石和导向，一定要保证数据的可靠性和所要得到的结果之间的关联性&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;</description>
+      <description>&lt;p&gt;&lt;strong&gt;&lt;em&gt;数据分析最主要的是数据，数据是分析的基石和导向，一定要保证数据的可靠性和所要得到的结果之间的关联性&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -53,7 +49,7 @@
       <pubDate>Tue, 08 Jan 2019 21:16:28 +0800</pubDate>
       
       <guid>https://charliemini.github.io/post/%E6%95%B0%E6%8D%AE%E7%9B%B8%E5%85%B3%E6%80%A7/</guid>
-      <description> 数据相关性 做利用python的pandas做数据分析时 ，经常会用到corr这个函数来得到数据相关系数，而这个函数可以使用3种普遍的数据统计方法，分别是：皮尔森（pearson）相关系数和斯皮尔曼（spearman）相关系数和肯德尔（kendall）相关系数。
+      <description> 做利用python的pandas做数据分析时 ，经常会用到corr这个函数来得到数据相关系数，而这个函数可以使用3种普遍的数据统计方法，分别是：皮尔森（pearson）相关系数和斯皮尔曼（spearman）相关系数和肯德尔（kendall）相关系数。
 pearson 定义：使用多维数据的协方差除以他们各自标准差的乘积得到相关系数。
 使用情况：在线性相关、正态分布的情况下使用精准度高。
 先从协方差说起，我们都知道标准差是用来统计一组数据的离散程度，方差是标准差的平方，或者说是“标准差的特殊情况”。而协方差可以看作是多维数据之间的“方差”，然后除以多维数据的“标准差”来得到相关离散系数。
@@ -97,9 +93,7 @@ spearman 定义: </description>
       <pubDate>Wed, 03 Jan 2018 22:23:22 +0800</pubDate>
       
       <guid>https://charliemini.github.io/post/git%E5%AD%A6%E4%B9%A0/</guid>
-      <description>&lt;h1 id=&#34;git的学习笔记&#34;&gt;GIT的学习笔记&lt;/h1&gt;
-
-&lt;p&gt;这是我初学GIT时记录下的笔记，很多地方都记录的不详细（毕竟我只是怕忘记了又要去查才简要记录了一点），并不足以参考，若想学习Git，请移步到下面网址：&lt;/p&gt;</description>
+      <description>&lt;p&gt;这是我初学GIT时记录下的笔记，很多地方都记录的不详细（毕竟我只是怕忘记了又要去查才简要记录了一点），并不足以参考，若想学习Git，请移步到下面网址：&lt;/p&gt;</description>
     </item>
     
   </channel>
