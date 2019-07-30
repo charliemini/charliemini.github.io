@@ -1,0 +1,299 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> Mysql主从复制 &middot; Miao&amp;Blog </title>
+    
+    <link rel="stylesheet" type="text/css" href="https://charliemini.github.io/css/uno.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://charliemini.github.io/css/lightGallery.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://charliemini.github.io/apple-touch-icon-144-precomposed.png">
+    <link rel="shortcut icon" href="https://charliemini.github.io/favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Miao&amp;Blog" />
+    
+    <script src="https://charliemini.github.io/js/jquery.min.js"></script>
+    <script src="https://charliemini.github.io/js/main.min.js">
+    </script>
+</head>
+
+  <body>
+    <div id="scriptHeader">
+    <span class="mobile btn-mobile-menu">
+            <i class="fa fa-bars btn-mobile-menu__icon"></i>
+            <i class="fa fa-times btn-mobile-close__icon hidden"> </i>
+    </span>
+    <header class="
+        
+            panel-cover panel-cover--collapsed
+        "  style="background-image: url(/images/background-cover.jpg)" >
+    <div class="panel-main">
+        <div class="panel-main__inner panel-inverted">
+            <div class="panel-main__content"> 
+                <a href="https://charliemini.github.io/" title="link to homepage for Miao&amp;Blog"> <img src="https://charliemini.github.io/img/logo-1.jpg" width="80" alt="Miao&amp;Blog logo" class="panel-cover__logo logo" /> </a> 
+                <h1 class="panel-cover__title panel-title">
+                    <a href="https://charliemini.github.io/"  title="link to homepage for Miao&amp;Blog">Miao&amp;Blog</a>
+                </h1>
+                <hr class="panel-cover__divider" />
+                <p class="panel-cover__description">  欢迎来到我的博客，下方有我的联系方式  </p>
+                <hr class="panel-cover__divider panel-cover__divider--secondary" />
+                <div class="navigation-wrapper">
+                    <nav class="cover-navigation cover-navigation--primary">
+                        <ul class="navigation">
+                            <li class="navigation__item"><a href="https://charliemini.github.io#blog" title="link to Miao&amp;Blog blog" class="blog-button">Blog</a> </li></br>
+                            
+                            
+                       </ul>
+                    </nav> <nav class="cover-navigation navigation--social">
+    <ul class="navigation"> 
+        
+        <li class="navigation__item">
+            <a href="http://twitter.com/wallflo61460582" title="@wallflo61460582 on Twitter"> <i class='fa fa-twitter'></i> <span class="label">Twitter</span> </a>
+        </li>   
+        
+        <li class="navigation__item">
+            <a href="https://github.com/charliemini" title="charliemini on github"> <i class='fa fa-github'></i> <span class="label">Github</span> </a>
+        </li>  </br>   
+        
+        <li class="navigation__item">
+            <a href="mailto:2314259324@qq.com" title="Email 2314259324@qq.com"> <i class='fa fa-envelope-o'></i> <span class="label">Email</span> </a>
+        </li>  </ul>
+</nav>
+ </div>
+            </div>
+        </div>
+        <div class="panel-cover--overlay"></div>
+    </div>
+</header>
+</div>
+<noscript>
+    <style>
+        #scriptHeader {display:none;}
+        .navigation-wrapper{
+            display: block;
+            top: 0;
+        }
+    </style>
+
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url(/images/background-cover.jpg)">
+        <div class="panel-main">
+            <div class="panel-main__inner panel-inverted">
+                <div class="panel-main__content"> 
+                    <a href="https://charliemini.github.io/" title="link to homepage for Miao&amp;Blog"> <img src="https://charliemini.github.io/img/logo-1.jpg" width="80" alt="Miao&amp;Blog logo" class="panel-cover__logo logo" /> </a> 
+                    <h1 class="panel-cover__title panel-title">
+                        <a href="https://charliemini.github.io/"  title="link to homepage for Miao&amp;Blog">Miao&amp;Blog</a>
+                    </h1>
+                    <hr class="panel-cover__divider" />
+                    <p class="panel-cover__description">  欢迎来到我的博客，下方有我的联系方式  </p>
+                    <hr class="panel-cover__divider panel-cover__divider--secondary" />
+                    <div class="navigation-wrapper">
+                        <nav class="cover-navigation cover-navigation--primary">
+                            <ul class="navigation">
+                                <li class="navigation__item"><a href="https://charliemini.github.io/#blog" title="link to Miao&amp;Blog blog" class="blog-button">Blog</a> </li></br>
+                                
+                                
+                           </ul>
+                        </nav> <nav class="cover-navigation navigation--social">
+    <ul class="navigation"> 
+        
+        <li class="navigation__item">
+            <a href="http://twitter.com/wallflo61460582" title="@wallflo61460582 on Twitter"> <i class='fa fa-twitter'></i> <span class="label">Twitter</span> </a>
+        </li>   
+        
+        <li class="navigation__item">
+            <a href="https://github.com/charliemini" title="charliemini on github"> <i class='fa fa-github'></i> <span class="label">Github</span> </a>
+        </li>  </br>   
+        
+        <li class="navigation__item">
+            <a href="mailto:2314259324@qq.com" title="Email 2314259324@qq.com"> <i class='fa fa-envelope-o'></i> <span class="label">Email</span> </a>
+        </li>  </ul>
+</nav>
+ </div>
+                </div>
+            </div>
+            <div class="panel-cover--overlay"></div>
+        </div>
+    </header>
+</noscript>
+
+    <div class="content-wrapper">
+      <div class="content-wrapper__inner">
+        <div class="post">
+          <h1>Mysql主从复制</h1>
+          <span class="post-date">Wed, Oct 3, 2018</span>
+          <h2 id="原理">原理</h2>
+
+<p>mysql 支持以binglog日志的形式支持主从数据库同步备份。在5.7版本之前，会以一个io线程读取binlog日志，一个sql线程执行主库sql的形式执行。在5.7之后，mysql支持多线程备份，有两种模式，一种是一个库一个线程，另一种是一个库多个线程，但要支持这种多线程备份，数据表结构必须升级成5.7版本的。</p>
+
+<p>##环境</p>
+
+<p>数据库版本：5.1.73
+系统版本：Centos 6.5</p>
+
+<p>##实现步骤
+(1) 配置主库参数
+<code>vim  /etc/my.cnf</code>
+在文件的[mysqld]标题下加入</p>
+
+<pre><code>server-id = 1            #id要唯一 
+log-bin = mysql-bin      #开启binlog日志
+relay_log_purge=1
+#binlog-do-db=IP_data     #需要同步的数据库名，如果有多个数据库，可重复此参数，每个数据库一行
+#binlog-ignore-db=mysql   #忽略同步的数据库
+#上述两项可能使主从数据库存在失误，建议全纪录日志,而在从库设置
+</code></pre>
+
+<p>重启数据库
+<code>service mysqld restart</code>
+(2)主库创建同步账号</p>
+
+<pre><code class="language-mysql&gt;">(3)配置从库参数
+`vim  /et/my.cnf`
+在文件的[mysqld]标题下加入
+</code></pre>
+
+<p>server-id = 3                           #这个设置大于1，且不能于其它从库相同
+log-bin = mysql-bin                     #开启binlog日志
+#replicate-do-db= IP_data               #备份数据库名
+#replicate-ignore-db=mysql              #忽略备份的数据库名
+replicate-wild-do-table = database.%    #设置备份数据库里所有表，更稳定
+replicate-wild-ignore-table = mysql.%
+read_only=1                         #设置只读<br />
+auto-increment-increment = 1        #这两个参数在Ubuntu系统中MySQL5.5以后都已经默认是1
+auto-increment-offset = 1          #避免两台服务器同时做更新时自增长字段的值之间发生冲突
+slave-skip-errors = all     #跳过主从复制出现的错误
+log_slave_updates = 1     #开启从库的binlog日志</p>
+
+<pre><code>(4)备份主库
+方法一
+`mysqldump -uroot -pxxxx --rutineso --skip-lock-tables --single-transaction --flush-logs --hex-blob --master-data=2 --database dbname &gt; db.sql`
+
+参数说明：
+</code></pre>
+
+<p>–routines：导出存储过程和函数
+–skip-lock-tables：不锁表
+–single_transaction：导出开始时设置事务隔离状态，并使用一致性快照开始事务。
+–master-data：默认等于1，将dump起始(change master to)binlog点和pos值写到结果中，等于2是将change master to写到结果中并注释</p>
+
+<pre><code>方法二
+` mysqldump -h IP -uusername -pxxxxx -B db1 db2 db3 ....   -e --max_allowed_packet=4194304 --net_buffer_length=16384 --skip-lock-tables --single-transaction --flush-logs --hex-blob --master-data=2 &gt;backup.sql`
+
+(5)将sql文件导入从库
+`create database dbname`
+`mysql -uroot -pxxx dbname&lt;db.sql`
+
+如果导入途中出现`Repair by sorting`太慢的问题，可能是某个表太大了，默认的磁盘空间不够。需要事先设置配置文件：
+`myisam_max_sort_file_size=xxG`     这个值根据需求设置 
+
+(6)从库设置从musqldump的时间点导入日志
+可以通过下面这个命令查看
+`show master STATUS`
+得到： ![1539312278(1).png](https://upload-images.jianshu.io/upload_images/7954818-24c3c33edea0b0af.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+然后在从库执行：
+` change master to master_host='IP', master_user='mysqlcopy', master_password='XXX',  master_port=3306，master_log_file='mysql-bin.000009', master_log_pos=106;
+`
+从库开启同步：
+`start slave;`
+执行`show slave status\G;`
+看到
+</code></pre>
+
+<p>Slave_IO_Running: Yes
+Slave_SQL_Running: Yes</p>
+
+<pre><code>就代表初步成功了
+##遇到的问题
+执行第六步的时候，发现
+</code></pre>
+
+<p>Slave_IO_Running: NO
+Last_IO_Error: Got fatal error 1236 from master when reading data from binar</p>
+
+<pre><code>解决方法：
+先关闭同步：`stop slave;`
+然后刷新日志：`flush logs;`
+日志后缀会加1，最后从库重新同步新日志
+` change master to master_host='IP', master_user='mysqlcopy', master_password='XXX',  master_log_file='mysql-bin.000010', master_log_pos=106;
+`
+开启同步：`start slave;`
+问题得以解决
+## 附
+
+（1）清理除了正在使用的其他日志文件  `purge binary logs to 'mysql-tb-bin.000005';`
+
+（2）清理预设日期之前的日志 `expire_logs_days=15（天数）`
+
+（3）设置日志文件最大容量 ` max_binlog_size = 1G`
+
+###安装5.1.73
+centos：去官网下载rpm包
+               同级目录下`yum install xx`
+###安装5.7
+将源更新安装
+### 配置
+
+更改文件
+centos：`/etc/my.cnf`
+ubuntu:`/etc/mysql/mysql.conf.d/mysqld.cnf`
+`cp \var\lib\mysql 新路径`
+记得赋予权限
+关闭mysql修稿配置
+
+###mysql5.1.73
+更改存储位置
+</code></pre>
+
+<p>[client]
+#socket         = /var/lib/mysql/mysql.sock
+default-character-set=utf8
+socket=******  #新的安装路径+mysql.sock</p>
+
+<p>[mysqld]
+#socket         = /var/lib/mysql/mysql.sock
+datadir= ****** #新的安装路径
+socket= ******</p>
+
+<p>[mysql]
+default-character-set = utf8
+socket=******</p>
+
+<pre><code>###mysql5.7
+修改`/etc/mysql/mysql.conf.d/mysqld.cnf`
+`datadir= ****** #新的安装路径`
+修改`/etc/apparmor.d/usr.sbin.mysqld`
+将以下路径修改
+</code></pre>
+
+<h1 id="allow-data-dir-access">Allow data dir access</h1>
+
+<p>/var/lib/mysql r,
+  /var/lib/mysql/** rwk,
+``<code>
+然后</code>/etc/init.d/apparmor  restart`</p>
+        </div>
+        <div class="sharing">
+<a href="https://twitter.com/intent/tweet?status=Mysql%e4%b8%bb%e4%bb%8e%e5%a4%8d%e5%88%b6-https%3a%2f%2fcharliemini.github.io%2fpost%2fmysql%25E4%25B8%25BB%25E4%25BB%258E%25E5%25A4%258D%25E5%2588%25B6%2f" target="_blank" title="Follow me on Twitter" class="twitter">
+<span class="fa fa-twitter-square fa-3x"></span></a>
+<a href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fcharliemini.github.io%2fpost%2fmysql%25E4%25B8%25BB%25E4%25BB%258E%25E5%25A4%258D%25E5%2588%25B6%2f" target="_blank" title="Join me on Facebook" class="facebook">
+<span class="fa fa-facebook-square fa-3x"></span></a>
+<a href="https://plus.google.com/share?url=https%3a%2f%2fcharliemini.github.io%2fpost%2fmysql%25E4%25B8%25BB%25E4%25BB%258E%25E5%25A4%258D%25E5%2588%25B6%2f" target="_blank" title="Google+" class="googleplus">
+<span class="fa fa-google-plus-square fa-3x"></span></a>
+<a href="http://www.linkedin.com/shareArticle?mini=true&url=https%3a%2f%2fcharliemini.github.io%2fpost%2fmysql%25E4%25B8%25BB%25E4%25BB%258E%25E5%25A4%258D%25E5%2588%25B6%2f&title=Mysql%e4%b8%bb%e4%bb%8e%e5%a4%8d%e5%88%b6" target="_blank" title="LinkedIn" class="linkedin">
+<span class="fa fa-linkedin-square fa-3x"></span></a>
+<a href="http://www.reddit.com/submit?url=https%3a%2f%2fcharliemini.github.io%2fpost%2fmysql%25E4%25B8%25BB%25E4%25BB%258E%25E5%25A4%258D%25E5%2588%25B6%2f" target="_blank" title="Reddit" class="reddit"><span class="fa fa-reddit-square fa-3x"></span></a>
+<a href="http://www.stumbleupon.com/submit?url=https%3a%2f%2fcharliemini.github.io%2fpost%2fmysql%25E4%25B8%25BB%25E4%25BB%258E%25E5%25A4%258D%25E5%2588%25B6%2f" target="_blank" title="StumbleUpon" class="stumbleupon"><span class="fa fa-stumbleupon fa-3x">
+</span></a>
+</div>
+        
+
+
+
+      </div>
+    </div>
+
+  </body>
+  
+</html>
