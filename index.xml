@@ -1,0 +1,1121 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+      <title>Miao&amp;Blog on Miao&amp;Blog </title>
+      <generator uri="https://gohugo.io">Hugo</generator>
+    <link>https://charliemini.github.io/</link>
+    <language>zh</language>
+    
+    <copyright>This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.</copyright>
+    <updated>Mon, 22 Jul 2019 11:22:58 CST</updated>
+    
+    <item>
+      <title>机器学习算法--随机森林</title>
+      <link>https://charliemini.github.io/post/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95-%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/</link>
+      <pubDate>Mon, 22 Jul 2019 11:22:58 CST</pubDate>
+      
+      <guid>https://charliemini.github.io/post/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95-%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/</guid>
+      <description>&lt;p&gt;随机森林是监督学习的一种，是基于多个决策树生成的，所以先要理解决策树。&lt;/p&gt;
+
+&lt;h3 id=&#34;决策树的原理&#34;&gt;决策树的原理&lt;/h3&gt;
+
+&lt;p&gt;决策树采用向下递归的方式，以信息熵为度量构造一颗熵值下降最快的树，具有可读性高、分类速度快等特点。&lt;/p&gt;
+
+&lt;p&gt;我们可以简单地将决策树想象为一个节点做True/False判断的二叉树，实际上他并不只是只有二叉。它基于数据形成，从而预测类别或回归情况下的连续值。决策树可分为两类：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;离散型：分类决策树，目标变量时离散的，比如性别等分类数据。&lt;/li&gt;
+&lt;li&gt;连续型：目标变量时连续的，如工资。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;常见的决策树算法有：ID3, C4.5, CART&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;ID3&lt;/strong&gt;:  基于信息增益理论选择特征递归地构建决策树。信息增益可以这样理解&amp;ndash;存在一个数据集D,它的熵值（不确定性）为H(D),现在给它一个条件特征A，此时D的条件熵就变成了H(D|A).而信息增益就是就是数据集熵值和条件熵值的差值，Gain(D, A) = H(D) - H(D|A)。如此，可以得出如果信息增益值越大，则划分后的数据自己熵就越低，就更准确，ID3算法每次会挑选信息增益最大特征划分数据。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;C4.5&lt;/strong&gt;: C4.5对ID3算法做了改进，因为计算信息增益时会偏向取值较多的特征，所以采用信息增益比来进行矫正。GainRatio(D,A) = Gain(D, A)/H(D)&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;CART&lt;/strong&gt;: CART算法引入了gini&amp;ndash;基尼不纯度的概念，指的是根据节点中样本的分布对样本分类时，从节点中随机选择样本被分错的概率。在算法运行中，总会计算该节点的基尼不纯度，选择基尼不纯度最小的特征进行切分。&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;但是不管哪种算法，决策树总可能存在过拟合的问题，即此决策树模型能够完美匹配训练集的数据，但是不能准确预测数据。假如我们不限制树的深度，这意味着它将为每一个观察点生成一个叶子节点，对训练集数据达到过分的完美拟合，造成过拟合。如果限制树的深度，则可能造成分类的准确性下降，增加模型的偏差。所以要平衡好决策树是不容易的一件事，所以为了解决这个问题，就产生了用多棵决策树形成随机森林的方案。&lt;/p&gt;
+
+&lt;h3 id=&#34;构造随机森林&#34;&gt;构造随机森林&lt;/h3&gt;
+
+&lt;p&gt;首先了解什么叫做自助抽样法：每一次抽取样本后，将样本返回，在下一次有概率抽到以抽取过的样本。&lt;/p&gt;
+
+&lt;p&gt;上面说过，随机森林由多棵决策树形成，它所要决定的是如何构造这些决策树。对一个数据集D，他有m行数据，n个特征，我们采用自主抽样法每次抽m1(m1&amp;lt;m)行，n1(n1&amp;lt;n)个特征数据构造决策树。在形成随机森林后，考虑每棵树的预测结果给出真正的预测结果。&lt;/p&gt;
+
+&lt;h3 id=&#34;优缺点&#34;&gt;优缺点&lt;/h3&gt;
+
+&lt;p&gt;随机森林的优缺点&lt;/p&gt;
+
+&lt;p&gt;优点：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;随机森林算法能解决分类与回归两种类型的问题，表现良好，由于是集成学习，方差和偏差都比较低，泛化性能优越；&lt;/li&gt;
+&lt;li&gt;随机森林对于高维数据集的处理能力很好，它可以处理成千上万的输入变量，并确定最重要的变量，因此被认为是一个不错的降维方法。此外，该模型能够输出特征的重要性程度，这是一个非常实用的功能。&lt;/li&gt;
+&lt;li&gt;可以应对缺失数据；&lt;/li&gt;
+&lt;li&gt;当存在分类不平衡的情况时，随机森林能够提供平衡数据集误差的有效方法；&lt;/li&gt;
+&lt;li&gt;高度并行化，易于分布式实现&lt;/li&gt;
+&lt;li&gt;由于是树模型，不需要归一化即可使用&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;缺点：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;随机森林在解决回归问题时并没有像它在分类中表现的那么好，这是因为它并不能给出一个连续型的输出。当进行回归时，随机森林不能够作出超越训练集数据范围的预测，这可能导致在对某些还有特定噪声的数据进行建模时出现过度拟合。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;对于许多统计建模者来说，随机森林给人的感觉像是一个黑盒子——你几乎无法控制模型内部的运行，只能在不同的参数和随机种子之间进行尝试。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;忽略特征之间的相关性&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;xgboost&#34;&gt;xgboost&lt;/h2&gt;
+
+&lt;p&gt;Xgboost 也是一种集成算法，基于一堆CART决策树形成，每棵决策树处理上一棵决策树遗留的“残差”，最终将所有CART预测目标结果相加即可得到最终预测值。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;监督学习&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;学习率&lt;/strong&gt;：控制着我们基于损失梯度调整神经网络权值的速度。直观来说，学习率越大，机器学习速度越快，但很容易越过最优值，在某一位置反复震荡；学习率过小，则机器学习的速度就变得太慢，可能会得到局部最优解。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Python绘图</title>
+      <link>https://charliemini.github.io/data/python%E7%BB%98%E5%9B%BE/</link>
+      <pubDate>Thu, 11 Jul 2019 15:02:52 CST</pubDate>
+      
+      <guid>https://charliemini.github.io/data/python%E7%BB%98%E5%9B%BE/</guid>
+      <description>&lt;h2 id=&#34;matplotlib&#34;&gt;matplotlib&lt;/h2&gt;
+
+&lt;p&gt;在matplotlib种，整个图像为一个figure对象，而在这个figure对象中包含一个或多个axes对象，每个axes对象都是一个拥有自己坐标系的绘图区域。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;fig,axes = plt.subplots(nrows, ncols)&lt;/code&gt; 接收行列数，返回一个figure对象和axes对象。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;axes.set_ylim&lt;/code&gt; 设置y轴区间&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;plt.plot&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;plt.xticks(roartion=90)&lt;/code&gt; 图横坐标标注旋转90度&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;plt.xlabel()&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;plt.ylabel()&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;Plt.title()&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;plt.figure(figsize=(6,6))&lt;/code&gt;定义长宽属性的画布&lt;/p&gt;
+
+&lt;h2 id=&#34;seaborn&#34;&gt;seaborn&lt;/h2&gt;
+
+&lt;h3 id=&#34;核密度估计&#34;&gt;核密度估计&lt;/h3&gt;
+
+&lt;p&gt;核密度估计（KDE），也叫非参数估计方法，即对数据分布不添加任何假定条件，直接从数据样本本身研究数据分布特征。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;seaborn.kdeplot()&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;而&lt;code&gt;seaborn.distlpot()&lt;/code&gt;集成了matplotlib的直方图方法hist() 与kdeplot 方法。&lt;/p&gt;
+
+&lt;h3 id=&#34;调色板&#34;&gt;调色板&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;seaborn.color_palette()&lt;/code&gt; 允许传入任何matplotlib制定有效的颜色数组，返回一个可供使用的RGB元祖列表。&lt;br&gt;&lt;code&gt;color_palette(&amp;quot;hls&amp;quot;, 8)&lt;/code&gt; 使用hls颜色区域定义8种颜色.  &lt;br&gt;&lt;code&gt;color_palette(&amp;quot;paired&amp;quot;, 8)&lt;/code&gt;  定义8种颜色，每两个一对，颜色相近。&lt;br&gt;&lt;code&gt;coloir_palette(&amp;quot;Blues&amp;quot;)&lt;/code&gt; 还可以传进来一个颜色名称，定义一个渐变色的调色板，默认是8个，渐变是由浅至深，要想变成有深至浅反过来在传参后面加上&lt;code&gt;_r&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;散点图&#34;&gt;散点图&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;sns.regplot(x, y, data.....)&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;热力图&#34;&gt;热力图&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;seaborn.heatmap(data, vmin=None, vmax=None, cmap=None, center=None, robust=False, annot=None, fmt=&#39;.2g&#39;, annot_kws=None, linewidths=0, linecolor=&#39;white&#39;, cbar=True, cbar_kws=None, cbar_ax=None, square=False, xticklabels=&#39;auto&#39;, yticklabels=&#39;auto&#39;, mask=None, ax=None, **kwargs)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;重要的参数：data是数据源，可以是一个二维数组。&lt;/p&gt;
+
+&lt;p&gt;​                        cannot = True 则展示单元格数字&lt;/p&gt;
+
+&lt;p&gt;​                        cmap 是指色彩颜色的选择&lt;/p&gt;
+
+&lt;h3 id=&#34;分类柱形图&#34;&gt;分类柱形图&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;seaborn.barplot(x=None, y=None, data=None)&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;箱线图&#34;&gt;箱线图&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;seaborn.boxplot(x=None, y=None, data=None)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;参数data是数据集，x为x轴，y为y轴，如果data是dataframe，x轴和y轴可以是他的列名。&lt;/p&gt;
+
+&lt;h3 id=&#34;结构化多绘图网格&#34;&gt;结构化多绘图网格&lt;/h3&gt;
+
+&lt;p&gt;利用数据集上不同子集的数据在同一张图上绘制子集数据图。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;seaborn.FacetGrid(data=None, col=None, row=None, hue=None)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;data必须是合适的dataframe数据，col、row、hue都是定义数据自己的变量（列名），每一个都将在网格的不同位置绘制。&lt;/p&gt;
+
+&lt;p&gt;但如果仅仅是调用该方法，只会初始化网格，并不会在它们上面绘制任何内容。想要在他身上可视化数据主要用FacetGrid.map()方法。&lt;/p&gt;
+
+&lt;p&gt;map方法里要提供为其提供绘图功能的函数方法function，要绘制的数据变量名称args(df列名)，然后会将df那列数据按照调用指定变量的顺序传递给function，还可以通过kwargs传递关键字字典传递该function本身方法的参数。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;g.map(function, *args, **kwargs)&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;小提琴-图&#34;&gt;&amp;ldquo;小提琴&amp;rdquo;图&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;seaborn.violinplot(x, y, data, hue=None, split=True)&lt;/code&gt;  &lt;br&gt;当split为true的时候，画出的小提琴图沿中轴线分别表示hue参数指定的特征两种分类。&lt;/p&gt;
+
+&lt;h3 id=&#34;联合绘图&#34;&gt;联合绘图&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;seaborn.jointplot(x, y, data, kind)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;jointplot方法一般用于两个变量之间的联合绘图，指定x和y的变量，data是数据源，kind参数则是制定绘图的格式。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;kind = scatter （默认 ） 带边缘直方图的散点图&lt;/li&gt;
+&lt;li&gt;kind = reg   带边缘核密度估计的回归图&lt;/li&gt;
+&lt;li&gt;kind = hex 带边缘直方图的六边形区域图，在数据量大的情况下，可以通过六边形的深浅清晰观测数据的分布（叠合）。&lt;/li&gt;
+&lt;li&gt;kind = kde kde图&lt;/li&gt;
+&lt;li&gt;Residents&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&#34;多变量图&#34;&gt;多变量图&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;seaborn.pariplot()&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;此函数将创建一个axes网格，使得传入的data参数重每个变量之间两两组合，形成n*n的对比图。&lt;/p&gt;
+
+&lt;h3 id=&#34;回归图&#34;&gt;回归图&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;seaborn.regplot(data, x, y , x_jitter=.05, ...)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;x_jitter 指对x特征的编译量，新特征数据将会在定义范围的偏移量中进行随机的偏移抖动。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Python绘图</title>
+      <link>https://charliemini.github.io/post/python%E7%BB%98%E5%9B%BE/</link>
+      <pubDate>Thu, 11 Jul 2019 15:02:52 CST</pubDate>
+      
+      <guid>https://charliemini.github.io/post/python%E7%BB%98%E5%9B%BE/</guid>
+      <description>&lt;h2 id=&#34;matplotlib&#34;&gt;matplotlib&lt;/h2&gt;
+
+&lt;p&gt;在matplotlib种，整个图像为一个figure对象，而在这个figure对象中包含一个或多个axes对象，每个axes对象都是一个拥有自己坐标系的绘图区域。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;fig,axes = plt.subplots(nrows, ncols)&lt;/code&gt; 接收行列数，返回一个figure对象和axes对象。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;axes.set_ylim&lt;/code&gt; 设置y轴区间&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;plt.plot&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;plt.xticks(roartion=90)&lt;/code&gt; 图横坐标标注旋转90度&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;plt.xlabel()&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;plt.ylabel()&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;Plt.title()&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;plt.figure(figsize=(6,6))&lt;/code&gt;定义长宽属性的画布&lt;/p&gt;
+
+&lt;h2 id=&#34;seaborn&#34;&gt;seaborn&lt;/h2&gt;
+
+&lt;h3 id=&#34;核密度估计&#34;&gt;核密度估计&lt;/h3&gt;
+
+&lt;p&gt;核密度估计（KDE），也叫非参数估计方法，即对数据分布不添加任何假定条件，直接从数据样本本身研究数据分布特征。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;seaborn.kdeplot()&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;而&lt;code&gt;seaborn.distplot()&lt;/code&gt;集成了matplotlib的直方图方法hist() 与kdeplot 方法。&lt;/p&gt;
+
+&lt;h3 id=&#34;调色板&#34;&gt;调色板&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;seaborn.color_palette()&lt;/code&gt; 允许传入任何matplotlib制定有效的颜色数组，返回一个可供使用的RGB元祖列表。&lt;br&gt;&lt;code&gt;color_palette(&amp;quot;hls&amp;quot;, 8)&lt;/code&gt; 使用hls颜色区域定义8种颜色.  &lt;br&gt;&lt;code&gt;color_palette(&amp;quot;paired&amp;quot;, 8)&lt;/code&gt;  定义8种颜色，每两个一对，颜色相近。&lt;br&gt;&lt;code&gt;coloir_palette(&amp;quot;Blues&amp;quot;)&lt;/code&gt; 还可以传进来一个颜色名称，定义一个渐变色的调色板，默认是8个，渐变是由浅至深，要想变成有深至浅反过来在传参后面加上&lt;code&gt;_r&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;回归图&#34;&gt;回归图&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;sns.regplot(x, y, data.....)&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;散点图&#34;&gt;散点图&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;seaborn.scatterplot(*x=None*, *y=None*, *hue=None*, *style=None*, *size=None*, *data=None*, *palette=None*, *hue_order=None*, *hue_norm=None*, *sizes=None*, *size_order=None*, *size_norm=None*, *markers=True*, *style_order=None*, *x_bins=None*, *y_bins=None*, *units=None*, *estimator=None*, *ci=95*, *n_boot=1000*, *alpha=&#39;auto&#39;*, *x_jitter=None*, *y_jitter=None*, *legend=&#39;brief&#39;*, *ax=None*, ***kwargs*)&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;热力图&#34;&gt;热力图&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;seaborn.heatmap(data, vmin=None, vmax=None, cmap=None, center=None, robust=False, annot=None, fmt=&#39;.2g&#39;, annot_kws=None, linewidths=0, linecolor=&#39;white&#39;, cbar=True, cbar_kws=None, cbar_ax=None, square=False, xticklabels=&#39;auto&#39;, yticklabels=&#39;auto&#39;, mask=None, ax=None, **kwargs)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;重要的参数：data是数据源，可以是一个二维数组。&lt;/p&gt;
+
+&lt;p&gt;​                        cannot = True 则展示单元格数字&lt;/p&gt;
+
+&lt;p&gt;​                        cmap 是指色彩颜色的选择&lt;/p&gt;
+
+&lt;h3 id=&#34;分类柱形图&#34;&gt;分类柱形图&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;seaborn.barplot(x=None, y=None, data=None)&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;箱线图&#34;&gt;箱线图&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;seaborn.boxplot(x=None, y=None, data=None)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;参数data是数据集，x为x轴，y为y轴，如果data是dataframe，x轴和y轴可以是他的列名。&lt;/p&gt;
+
+&lt;h3 id=&#34;结构化多绘图网格&#34;&gt;结构化多绘图网格&lt;/h3&gt;
+
+&lt;p&gt;利用数据集上不同子集的数据在同一张图上绘制子集数据图。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;seaborn.FacetGrid(data=None, col=None, row=None, hue=None)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;data必须是合适的dataframe数据，col、row、hue都是定义数据自己的变量（列名），每一个都将在网格的不同位置绘制。&lt;/p&gt;
+
+&lt;p&gt;但如果仅仅是调用该方法，只会初始化网格，并不会在它们上面绘制任何内容。想要在他身上可视化数据主要用FacetGrid.map()方法。&lt;/p&gt;
+
+&lt;p&gt;map方法里要提供为其提供绘图功能的函数方法function，要绘制的数据变量名称args(df列名)，然后会将df那列数据按照调用指定变量的顺序传递给function，还可以通过kwargs传递关键字字典传递该function本身方法的参数。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;g.map(function, *args, **kwargs)&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;小提琴-图&#34;&gt;&amp;ldquo;小提琴&amp;rdquo;图&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;seaborn.violinplot(x, y, data, hue=None, split=True)&lt;/code&gt;  &lt;br&gt;当split为true的时候，画出的小提琴图沿中轴线分别表示hue参数指定的特征两种分类。&lt;/p&gt;
+
+&lt;h3 id=&#34;联合绘图&#34;&gt;联合绘图&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;seaborn.jointplot(x, y, data, kind)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;jointplot方法一般用于两个变量之间的联合绘图，指定x和y的变量，data是数据源，kind参数则是制定绘图的格式。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;kind = scatter （默认 ） 带边缘直方图的散点图&lt;/li&gt;
+&lt;li&gt;kind = reg   带边缘核密度估计的回归图&lt;/li&gt;
+&lt;li&gt;kind = hex 带边缘直方图的六边形区域图，在数据量大的情况下，可以通过六边形的深浅清晰观测数据的分布（叠合）。&lt;/li&gt;
+&lt;li&gt;kind = kde kde图&lt;/li&gt;
+&lt;li&gt;Residents&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&#34;多变量图&#34;&gt;多变量图&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;seaborn.pariplot()&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;此函数将创建一个axes网格，使得传入的data参数重每个变量之间两两组合，形成n*n的对比图。&lt;/p&gt;
+
+&lt;h3 id=&#34;回归图-1&#34;&gt;回归图&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;seaborn.regplot(data, x, y , x_jitter=.05, ...)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;x_jitter 指对x特征的编译量，新特征数据将会在定义范围的偏移量中进行随机的偏移抖动。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>GO学习笔记</title>
+      <link>https://charliemini.github.io/post/go%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Wed, 12 Jun 2019 20:54:36 CST</pubDate>
+      
+      <guid>https://charliemini.github.io/post/go%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</guid>
+      <description>&lt;h2 id=&#34;结构化程序&#34;&gt;结构化程序&lt;/h2&gt;
+
+&lt;p&gt;每个程序都由pkg的概念组成，必须在源代码里非注释的第一行致指明这个文件属于哪一个包,注意包的名字都要用小写字母。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;package main&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;标准库&#34;&gt;标准库&lt;/h2&gt;
+
+&lt;p&gt;重定义包名&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;import fm &amp;quot;fmt&amp;quot;&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;如果导入了一个没有使用的包会报错&lt;/p&gt;
+
+&lt;h2 id=&#34;类型&#34;&gt;类型&lt;/h2&gt;
+
+&lt;p&gt;结构化的类型以nil作为默认值&lt;/p&gt;
+
+&lt;h2 id=&#34;常量&#34;&gt;常量&lt;/h2&gt;
+
+&lt;p&gt;用const定义，用于存储不会改变的数据线，只能是布尔型、数字和字符串。&lt;/p&gt;
+
+&lt;p&gt;支持显、隐式类型定义&lt;/p&gt;
+
+&lt;h2 id=&#34;变量&#34;&gt;变量&lt;/h2&gt;
+
+&lt;p&gt;用&lt;code&gt;var&lt;/code&gt;关键字声明变量 &lt;code&gt;var identifier type&lt;/code&gt; OR &lt;code&gt;var identifier type = value&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;当变量被声明后，系统自动赋予它该类型的零型，所有的内存在go中都是经过初始化的。变量命名规则遵循驼峰法。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;如果希望全局变量被外部包使用，则需要将首个单词字母大写&lt;/strong&gt;*。&lt;/p&gt;
+
+&lt;p&gt;在函数体内部初始化声明变量时可以使用简短的语法：&lt;code&gt;a := 1&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;声明局部变量而不去使用它同样会出现编译错误&lt;/p&gt;
+
+&lt;p&gt;使用等于号进行变量间的相互赋值时，只是引用了同一个地址指针。&lt;/p&gt;
+
+&lt;p&gt;如果想要交换两个文明变量的值，可以使用&lt;code&gt;a,b = b,a&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;_&lt;/code&gt; 被当作一个只写变量&lt;/p&gt;
+
+&lt;p&gt;全局变量除了可以在全局声明中初始化，也可以在&lt;code&gt;init&lt;/code&gt;函数中初始化,也就是在声明的全局变量，可以经由&lt;code&gt;init&lt;/code&gt; 函数更改赋值并作用于整个程序作用域。&lt;/p&gt;
+
+&lt;h2 id=&#34;基本类型与运算符&#34;&gt;基本类型与运算符&lt;/h2&gt;
+
+&lt;p&gt;GO是强类型语言，只支持显示转换，所以只有类型严格相同时才可以做运算操作。&lt;/p&gt;
+
+&lt;p&gt;不允许不同类型之间的混合使用，但允许和常量之间的混合使用。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func main(){
+	var a int
+	var b int 16
+	a = 1
+	b = a + a // 错误
+	b = b + 5 
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;格式化字符串：%d用于格式化字符串&lt;/p&gt;
+
+&lt;p&gt;​                           %x，%X用于格式化16进制表示的数字&lt;/p&gt;
+
+&lt;p&gt;​                           %g用于格式化浮点数（%f输出浮点数，%e输出科学计数表示法）&lt;/p&gt;
+
+&lt;p&gt;​                            %0d用于输出定长的整数&lt;/p&gt;
+
+&lt;p&gt;​                           %n.mg用于表示数字n并精确到小数点后m位，g还可以替换为e，f&lt;/p&gt;
+
+&lt;p&gt;在算数运算时溢出并不会产生错误，只会将超出的位数抛弃。对于产出范围的有理数可以使用标准库中的&lt;code&gt;big&lt;/code&gt;包&lt;/p&gt;
+
+&lt;p&gt;为了简化名称和解决名称冲突，可以使用类型别名。&lt;code&gt;type A int&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;GO字符串中字符为ASCII时占用一个字节，其它字符根据需要占据2-4个字节。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;strings&lt;/code&gt;包&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;strings.HasPrefix(s, string) bool 判断s是否以string开头&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;strings.HasSuffix(s, string) bool 判断s是否以string结尾&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;strings.Contains(s, string) bool 判断字符串s是否包含string&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;strings.Index(s, string) int 返回字符串string在s中第一个匹配的索引，返回-1表示不存在&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;strings.LastIndex(s, string) int返回字符串string在s中最后一个匹配的索引，返回-1表示不存在&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;对于非ASCII编码的ch，建议使用strings,IndexRune定位                            strings.IndexRune(s, ch) int&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;strings.Replace(s, old, new, n) string 字符替换，n表示替换前几个字符，n=-1表示全替换&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;strings.Count(s, string) int 计算string在s中出现的非重叠次数。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;strings.Repeat(s, count int) string 返回count次重复字符串s的的心字符串&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;strings.ToLower(s) string 转化为小写字符&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;strings.ToUpper(s) string 转化大写字符&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;strings.TrimSpace(s, &amp;ldquo;&amp;rdquo;) 剔除字符串s开头结尾指定字符&lt;/p&gt;
+
+&lt;p&gt;strings.TrimLeft()&lt;/p&gt;
+
+&lt;p&gt;strings.TrimRight()&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;string.Fields(s, sep) 切割字符串，返回slice&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;string.Join(sl []string, sep string) string 将字符串数组用字符sep拼接&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;String.NewReader(str) 用于生成一个reader并读取字符串中的内容，并返回指向该reader的指针。&lt;/p&gt;
+
+&lt;p&gt;Read() —&amp;gt; byte&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;code&gt;strconv&lt;/code&gt;包&lt;/p&gt;
+
+&lt;p&gt;用于字符串相关的类型转换。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;strconv.Atoi(s string) (i int, err error)&lt;/code&gt; 将字符串转换为 int 型。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;strconv.IntSize&lt;/code&gt; 获取程序运行的操作系统下int所占位数。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;sync&lt;/code&gt;包，互斥锁。&lt;/p&gt;
+
+&lt;h2 id=&#34;指针&#34;&gt;指针&lt;/h2&gt;
+
+&lt;p&gt;无法得到常量的地址&lt;/p&gt;
+
+&lt;p&gt;对于一个空指针的反向引用是不合法的&lt;/p&gt;
+
+&lt;h2 id=&#34;控制结构&#34;&gt;控制结构&lt;/h2&gt;
+
+&lt;p&gt;不要同时在if-else结构的两个分支里都使用return语句，会导致程序编译错误。(GO1.1 已修复)&lt;/p&gt;
+
+&lt;p&gt;Runtime.GOOS 是常量，是程序运行的操作系统类型。&lt;/p&gt;
+
+&lt;p&gt;if 可以包含初始化语句&lt;code&gt;if a := 10; a &amp;gt; number&lt;/code&gt; 这种方式定义的变量a只存在于if语句的作用域中。&lt;/p&gt;
+
+&lt;p&gt;switch中，如果在命中case后还希望执行下面的case，可以使用&lt;code&gt;fallthrough&lt;/code&gt;关键字。&lt;/p&gt;
+
+&lt;p&gt;Go里的for循环和C一样，但存在一个for-range结构，可以迭代任何一个集合.     &lt;code&gt;for pos,char := range str&lt;/code&gt;  pos为索引位置，char为值。&lt;/p&gt;
+
+&lt;p&gt;For,    switch,     select语句都可以配合标签使用。&lt;/p&gt;
+
+&lt;h2 id=&#34;函数&#34;&gt;函数&lt;/h2&gt;
+
+&lt;p&gt;用&lt;code&gt;func&lt;/code&gt;定义函数，函数体用{}括起来&lt;/p&gt;
+
+&lt;p&gt;main函数没有参数，也没有返回类型&lt;/p&gt;
+
+&lt;p&gt;Go不允许进行函数重载，函数可以以声明的方式被使用，不需要函数体。&lt;/p&gt;
+
+&lt;p&gt;返回多个非命名返回值时，需要在函数头事先用（）括起返回类型，尽量不要使用非命名返回值。&lt;/p&gt;
+
+&lt;p&gt;在go中存在变参函数，类似于python中的*args，在传参中使用&lt;code&gt;name ...type&lt;/code&gt;的形式，可以传递多个同类型的参数形式。如果不确定变长参数的类型或者变长参数存在多种类型的时候，可以用默认的空接口&lt;code&gt;interface{}&lt;/code&gt;代替type。&lt;/p&gt;
+
+&lt;p&gt;Go允许自己定义结构类型,其中可以混合多种变量类型.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-Go&#34;&gt;type struct_name struct{
+	part1 int,
+	part float,
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;关键字defer在函数中被使用的时候，会在程序将要返回时执行，它类似栈，如果有多个defer会从最后面的开始执行。它允许我们进行一些&amp;rdquo;收尾&amp;rdquo;工作，比如关闭文件流，打印，解锁，关闭数据库，实现代码追踪。&lt;/p&gt;
+
+&lt;p&gt;在大量的递归调用中可能会发生栈溢出的问题，也就是栈资源耗尽。&lt;/p&gt;
+
+&lt;p&gt;匿名函数无法单独存在，但可以赋值给一个变量，func 关键字必须紧贴着第一个括号。这类似闭包，闭包可以看作是函数与外部变量的组合体，外部变量和函数一直存在。闭包避免了使用全局变量，将数据与函数紧密结合。&lt;/p&gt;
+
+&lt;h2 id=&#34;数组&#34;&gt;数组&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;var identifier [len]type&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;当数组还未定义时，可以使用make方法定义切片&lt;code&gt;var slice1 []type = make([]type, len)&lt;/code&gt;  简写为&lt;code&gt;slice1 := make([]type, len)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;对于&lt;code&gt;[]byte&lt;/code&gt;进行切片要使用bytes包，&lt;code&gt;var buffer bytes.Buffer&lt;/code&gt;                       &lt;code&gt;var r *bytes.Buffer = new(bytes.Buffer)&lt;/code&gt; 利用buffer.WriteString(s)的方法拼接内容比使用 &lt;code&gt;+=&lt;/code&gt; 更省内存和cpu。&lt;/p&gt;
+
+&lt;p&gt;遍历数组和切片可以使用 for-range 结构，返回数组索引和value。&lt;/p&gt;
+
+&lt;p&gt;append方法可以实现对切片元素的增加，切片的拼接。&lt;/p&gt;
+
+&lt;h2 id=&#34;map&#34;&gt;map&lt;/h2&gt;
+
+&lt;p&gt;map对应的数据结构时字典。声明&lt;code&gt;var mapname map[keytype]valuetype&lt;/code&gt;                          初始化 &lt;code&gt;map1 := make(map[keytype]valuetype)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;map传递给函数的代价很小，因为是用key传递的，而key在32位机器上占32个字节，在64位机器上占8个字节。map不要用new方法去声明，因为new方法如果错误使用的话，会创建一个空饮用的指针，所以最好一直用make创建map。map容量可以定义，超过容量会自动增加对应空间。&lt;/p&gt;
+
+&lt;h2 id=&#34;自定义包&#34;&gt;自定义包&lt;/h2&gt;
+
+&lt;p&gt;import格式： import &amp;ldquo;包的路径/url地址&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;主程序要利用的包必须要在主程序编译之前被编译完成。当时用&lt;code&gt;.&lt;/code&gt;来做倒入包的别名时，可以不通过包名来使用其中的项目，否则都要使用&lt;code&gt;packgename.function&lt;/code&gt;的形式来使用。可以使用&lt;code&gt;go install packagename&lt;/code&gt;的命令将洗定义的包编译安装到本地环境。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Mysql主从复制</title>
+      <link>https://charliemini.github.io/post/mysql%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/</link>
+      <pubDate>Wed, 03 Oct 2018 19:36:49 CST</pubDate>
+      
+      <guid>https://charliemini.github.io/post/mysql%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/</guid>
+      <description>&lt;h2 id=&#34;原理&#34;&gt;原理&lt;/h2&gt;
+
+&lt;p&gt;mysql 支持以binglog日志的形式支持主从数据库同步备份。在5.7版本之前，会以一个io线程读取binlog日志，一个sql线程执行主库sql的形式执行。在5.7之后，mysql支持多线程备份，有两种模式，一种是一个库一个线程，另一种是一个库多个线程，但要支持这种多线程备份，数据表结构必须升级成5.7版本的。&lt;/p&gt;
+
+&lt;p&gt;##环境&lt;/p&gt;
+
+&lt;p&gt;数据库版本：5.1.73
+系统版本：Centos 6.5&lt;/p&gt;
+
+&lt;p&gt;##实现步骤
+(1) 配置主库参数
+&lt;code&gt;vim  /etc/my.cnf&lt;/code&gt;
+在文件的[mysqld]标题下加入&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;server-id = 1            #id要唯一 
+log-bin = mysql-bin      #开启binlog日志
+relay_log_purge=1
+#binlog-do-db=IP_data     #需要同步的数据库名，如果有多个数据库，可重复此参数，每个数据库一行
+#binlog-ignore-db=mysql   #忽略同步的数据库
+#上述两项可能使主从数据库存在失误，建议全纪录日志,而在从库设置
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;重启数据库
+&lt;code&gt;service mysqld restart&lt;/code&gt;
+(2)主库创建同步账号&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-mysql&amp;gt;&#34;&gt;(3)配置从库参数
+`vim  /et/my.cnf`
+在文件的[mysqld]标题下加入
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;server-id = 3                           #这个设置大于1，且不能于其它从库相同
+log-bin = mysql-bin                     #开启binlog日志
+#replicate-do-db= IP_data               #备份数据库名
+#replicate-ignore-db=mysql              #忽略备份的数据库名
+replicate-wild-do-table = database.%    #设置备份数据库里所有表，更稳定
+replicate-wild-ignore-table = mysql.%
+read_only=1                         #设置只读&lt;br /&gt;
+auto-increment-increment = 1        #这两个参数在Ubuntu系统中MySQL5.5以后都已经默认是1
+auto-increment-offset = 1          #避免两台服务器同时做更新时自增长字段的值之间发生冲突
+slave-skip-errors = all     #跳过主从复制出现的错误
+log_slave_updates = 1     #开启从库的binlog日志&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;(4)备份主库
+方法一
+`mysqldump -uroot -pxxxx --rutineso --skip-lock-tables --single-transaction --flush-logs --hex-blob --master-data=2 --database dbname &amp;gt; db.sql`
+
+参数说明：
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;–routines：导出存储过程和函数
+–skip-lock-tables：不锁表
+–single_transaction：导出开始时设置事务隔离状态，并使用一致性快照开始事务。
+–master-data：默认等于1，将dump起始(change master to)binlog点和pos值写到结果中，等于2是将change master to写到结果中并注释&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;方法二
+` mysqldump -h IP -uusername -pxxxxx -B db1 db2 db3 ....   -e --max_allowed_packet=4194304 --net_buffer_length=16384 --skip-lock-tables --single-transaction --flush-logs --hex-blob --master-data=2 &amp;gt;backup.sql`
+
+(5)将sql文件导入从库
+`create database dbname`
+`mysql -uroot -pxxx dbname&amp;lt;db.sql`
+
+如果导入途中出现`Repair by sorting`太慢的问题，可能是某个表太大了，默认的磁盘空间不够。需要事先设置配置文件：
+`myisam_max_sort_file_size=xxG`     这个值根据需求设置 
+
+(6)从库设置从musqldump的时间点导入日志
+可以通过下面这个命令查看
+`show master STATUS`
+得到： ![1539312278(1).png](https://upload-images.jianshu.io/upload_images/7954818-24c3c33edea0b0af.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+然后在从库执行：
+` change master to master_host=&#39;IP&#39;, master_user=&#39;mysqlcopy&#39;, master_password=&#39;XXX&#39;,  master_port=3306，master_log_file=&#39;mysql-bin.000009&#39;, master_log_pos=106;
+`
+从库开启同步：
+`start slave;`
+执行`show slave status\G;`
+看到
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Slave_IO_Running: Yes
+Slave_SQL_Running: Yes&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;就代表初步成功了
+##遇到的问题
+执行第六步的时候，发现
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Slave_IO_Running: NO
+Last_IO_Error: Got fatal error 1236 from master when reading data from binar&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;解决方法：
+先关闭同步：`stop slave;`
+然后刷新日志：`flush logs;`
+日志后缀会加1，最后从库重新同步新日志
+` change master to master_host=&#39;IP&#39;, master_user=&#39;mysqlcopy&#39;, master_password=&#39;XXX&#39;,  master_log_file=&#39;mysql-bin.000010&#39;, master_log_pos=106;
+`
+开启同步：`start slave;`
+问题得以解决
+## 附
+
+（1）清理除了正在使用的其他日志文件  `purge binary logs to &#39;mysql-tb-bin.000005&#39;;`
+
+（2）清理预设日期之前的日志 `expire_logs_days=15（天数）`
+
+（3）设置日志文件最大容量 ` max_binlog_size = 1G`
+
+###安装5.1.73
+centos：去官网下载rpm包
+               同级目录下`yum install xx`
+###安装5.7
+将源更新安装
+### 配置
+
+更改文件
+centos：`/etc/my.cnf`
+ubuntu:`/etc/mysql/mysql.conf.d/mysqld.cnf`
+`cp \var\lib\mysql 新路径`
+记得赋予权限
+关闭mysql修稿配置
+
+###mysql5.1.73
+更改存储位置
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;[client]
+#socket         = /var/lib/mysql/mysql.sock
+default-character-set=utf8
+socket=******  #新的安装路径+mysql.sock&lt;/p&gt;
+
+&lt;p&gt;[mysqld]
+#socket         = /var/lib/mysql/mysql.sock
+datadir= ****** #新的安装路径
+socket= ******&lt;/p&gt;
+
+&lt;p&gt;[mysql]
+default-character-set = utf8
+socket=******&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;###mysql5.7
+修改`/etc/mysql/mysql.conf.d/mysqld.cnf`
+`datadir= ****** #新的安装路径`
+修改`/etc/apparmor.d/usr.sbin.mysqld`
+将以下路径修改
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;allow-data-dir-access&#34;&gt;Allow data dir access&lt;/h1&gt;
+
+&lt;p&gt;/var/lib/mysql r,
+  /var/lib/mysql/** rwk,
+``&lt;code&gt;
+然后&lt;/code&gt;/etc/init.d/apparmor  restart`&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Sql进阶</title>
+      <link>https://charliemini.github.io/post/sql%E8%BF%9B%E9%98%B6/</link>
+      <pubDate>Tue, 07 Aug 2018 16:55:35 CST</pubDate>
+      
+      <guid>https://charliemini.github.io/post/sql%E8%BF%9B%E9%98%B6/</guid>
+      <description>&lt;h2 id=&#34;连接&#34;&gt;连接&lt;/h2&gt;
+
+&lt;p&gt;数据库查询的连接可分为内连接，外链接，交叉连接。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;内连接 &lt;code&gt;table1 inner join table2 条件&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;内连接查询的时候，只有条件真的满足的时候才会返回搜索结果，不会像外连接那样在不满足条件的情况下左表或右表 返回空值。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;外连接 &lt;code&gt;left join 条件&lt;/code&gt;  &lt;code&gt;right join 条件&lt;/code&gt; &lt;code&gt;outer jion 条件&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;以左外连接为例，左外连接以左表为主，如果条件为能得到满足，会返回左表数据和空的“右表数据”。右外连接类似。&lt;/p&gt;
+
+&lt;p&gt;而全连接不以哪个表为主，只要是哪个表有数据就ok,以空值代替缺失。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;交叉连接 &lt;code&gt;cross join&lt;/code&gt;&amp;lsquo;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;交叉连接也被叫做笛卡尔积，类似于矩阵相乘，在没有条件的情况下，将左边的每一行与右表的每一行组合。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;： 数据库连表查询时，是通过生成临时表来返回数据。在外连接条件中，&lt;code&gt;on&lt;/code&gt;关键字作用于生成临时表的时候，它是不管&lt;code&gt;on&lt;/code&gt;的条件是否被满足，都会返回左表的数据。而&lt;code&gt;where&lt;/code&gt;关键字是在临时表生成后，再对临时表进行过滤，所以不会刻意保留“主表”数据。&lt;/p&gt;
+
+&lt;h2 id=&#34;判断&#34;&gt;判断&lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;if(true/false, a, b)&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;如果真/假，执行a，否则执行b&lt;/p&gt;
+
+&lt;p&gt;Eg. &lt;code&gt;update tabke1 set status = if(status=true, false, true)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;上面这条sql语句意为将status字段值为true的改为false，值不等于true的改为true。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;ifnull(a, b)&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;从左往右判断，如果a不为null，就取a；如果a为null，就取b。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;case when then else end&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Eg. &lt;code&gt;select (case status when true then 1 when flase then 0 end) from table1&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;从table1表里查询status字段，并修改该字段返回值，true-&amp;gt;1，false-&amp;gt;0&lt;/p&gt;
+
+&lt;h2 id=&#34;sql练习&#34;&gt;sql练习&lt;/h2&gt;
+
+&lt;p&gt;​       可以在复制语句在 &lt;a href=&#34;http://sqlfiddle.com/&#34;&gt;sqlfiddle&lt;/a&gt; 网站中练习&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;存储过程，表名做参数
+DELIMITER //
+    CREATE PROCEDURE GetCount(name varchar(100))
+    BEGIN
+        set @sql_select = concat(&#39;SELECT count(1)  FROM &#39;,name);
+        prepare sql_select from @sql_select;
+        execute sql_select;
+    END //
+DELIMITER ;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;查找每个学科分数都大于80的学生姓名
+
+create table study(
+  name varchar(30),
+  subject varchar(50),
+  score int
+);
+
+insert into study values
+(&#39;张三&#39;,  &#39;语文&#39;, 81),
+(&#39;张三&#39;,  &#39;数学&#39;, 75),
+(&#39;李四&#39;,  &#39;语文&#39;, 76),
+(&#39;李四&#39;,  &#39;数学&#39;, 90),
+(&#39;王五&#39;,  &#39;语文&#39;, 81),
+(&#39;王五&#39;,  &#39;数学&#39;, 100),
+(&#39;王五&#39;,  &#39;英语&#39;, 90);
+
+SQL: select name from (select distinct(name) as name,min(score) as score from study group by name) as a where score &amp;gt;=80; 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;去除除了id之外的重复值
+
+create table study(
+  id int,
+  s_id int,
+  name varchar(30),
+  sub_id  varchar(10),
+  sub_name varchar(50),
+  score int
+);
+
+insert into study values
+(1, 2005001, &#39;张三&#39;, &#39;0001&#39;, &#39;数学&#39;, 69),
+(2, 2005002, &#39;李四&#39;, &#39;0001&#39;, &#39;数学&#39;, 89),
+(3, 2005001, &#39;张三&#39;, &#39;0001&#39;, &#39;数学&#39;, 69);
+
+查找unique
+SQL: select *  from study where id  in (select MIN(id)  from study group by s_id,name,sub_id,sub_name,score )
+删除重复：
+SQl1: delete  from study where id not in (select a.id from (select min(id) as id from study group by s_id,name,sub_id,sub_name,score ) as a)
+Sql2: insert into temp(s_id,name,sub_id,sub_name,score)  select distinct s_id,name,sub_id,sub_name,score from study
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;查找各个月份debitoccur比ID为101大的数据
+
+create table study(
+  accid int,
+  occmonth int,
+  debitoccur int
+);
+
+insert into study values
+(101,  1, 81),
+(102,  1, 75),
+(103,  1, 96),
+(101,  2, 90),
+(102,  2, 81),
+(103,  2, 100),
+(101, 3, 89);
+
+SQL: select * from study as a, (select occmonth, debitoccur from study where accid=101) as b
+          where a.occmonth = b.occmonth and  a.debitoccur&amp;gt; b.debitoccur;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;给查出的数据根据score是否大于等于60增加一个是否通过的字段
+
+create table study(
+  id int,
+  name varchar(10),
+  score int
+);
+
+insert into study values
+(1, &#39;a&#39;, 23),
+(2, &#39;c&#39;, 61),
+(3, &#39;b&#39;, 86);
+
+SQL: select name, score , (case when score &amp;gt;= 60 then &#39;pass&#39; else &#39;faliure&#39; end) as judge  from study;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;create table Student(SId varchar(10),Sname varchar(10),Sage datetime,Ssex varchar(10));
+insert into Student values(&#39;01&#39; , &#39;赵雷&#39; , &#39;1990-01-01&#39; , &#39;男&#39;);
+insert into Student values(&#39;02&#39; , &#39;钱电&#39; , &#39;1990-12-21&#39; , &#39;男&#39;);
+insert into Student values(&#39;03&#39; , &#39;孙风&#39; , &#39;1990-12-20&#39; , &#39;男&#39;);
+insert into Student values(&#39;04&#39; , &#39;李云&#39; , &#39;1990-12-06&#39; , &#39;男&#39;);
+insert into Student values(&#39;05&#39; , &#39;周梅&#39; , &#39;1991-12-01&#39; , &#39;女&#39;);
+insert into Student values(&#39;06&#39; , &#39;吴兰&#39; , &#39;1992-01-01&#39; , &#39;女&#39;);
+insert into Student values(&#39;07&#39; , &#39;郑竹&#39; , &#39;1989-01-01&#39; , &#39;女&#39;);
+insert into Student values(&#39;09&#39; , &#39;张三&#39; , &#39;2017-12-20&#39; , &#39;女&#39;);
+insert into Student values(&#39;10&#39; , &#39;李四&#39; , &#39;2017-12-25&#39; , &#39;女&#39;);
+insert into Student values(&#39;11&#39; , &#39;李四&#39; , &#39;2012-06-06&#39; , &#39;女&#39;);
+insert into Student values(&#39;12&#39; , &#39;赵六&#39; , &#39;2013-06-13&#39; , &#39;女&#39;);
+insert into Student values(&#39;13&#39; , &#39;孙七&#39; , &#39;2014-06-01&#39; , &#39;女&#39;);
+
+create table Course(CId varchar(10),Cname nvarchar(10),TId varchar(10));
+insert into Course values(&#39;01&#39; , &#39;语文&#39; , &#39;02&#39;);
+insert into Course values(&#39;02&#39; , &#39;数学&#39; , &#39;01&#39;);
+insert into Course values(&#39;03&#39; , &#39;英语&#39; , &#39;03&#39;);
+
+create table Teacher(TId varchar(10),Tname varchar(10));
+insert into Teacher values(&#39;01&#39; , &#39;张三&#39;);
+insert into Teacher values(&#39;02&#39; , &#39;李四&#39;);
+insert into Teacher values(&#39;03&#39; , &#39;王五&#39;);
+
+create table SC(SId varchar(10),CId varchar(10),score decimal(18,1));
+insert into SC values(&#39;01&#39; , &#39;01&#39; , 80);
+insert into SC values(&#39;01&#39; , &#39;02&#39; , 90);
+insert into SC values(&#39;01&#39; , &#39;03&#39; , 99);
+insert into SC values(&#39;02&#39; , &#39;01&#39; , 70);
+insert into SC values(&#39;02&#39; , &#39;02&#39; , 60);
+insert into SC values(&#39;02&#39; , &#39;03&#39; , 80);
+insert into SC values(&#39;03&#39; , &#39;01&#39; , 80);
+insert into SC values(&#39;03&#39; , &#39;02&#39; , 80);
+insert into SC values(&#39;03&#39; , &#39;03&#39; , 80);
+insert into SC values(&#39;04&#39; , &#39;01&#39; , 50);
+insert into SC values(&#39;04&#39; , &#39;02&#39; , 30);
+insert into SC values(&#39;04&#39; , &#39;03&#39; , 20);
+insert into SC values(&#39;05&#39; , &#39;01&#39; , 76);
+insert into SC values(&#39;05&#39; , &#39;02&#39; , 87);
+insert into SC values(&#39;06&#39; , &#39;01&#39; , 31);
+insert into SC values(&#39;06&#39; , &#39;03&#39; , 34);
+insert into SC values(&#39;07&#39; , &#39;02&#39; , 89);
+insert into SC values(&#39;07&#39; , &#39;03&#39; , 98);
+
+1. 查询&amp;quot; 01 &amp;quot;课程比&amp;quot; 02 &amp;quot;课程成绩高的学生的信息及课程分数
+SQL:select Sname,score from Student, 
+(select a.SId as id, a.score as score   from SC as a, SC as b where a.SId=b.SId and a.CId =&#39;01&#39; and b.CId=&#39;02&#39; and a.score&amp;gt;b.score) as c 
+where Student.SId=c.id;  
+
+1.1 查询同时存在&amp;quot; 01 &amp;quot;课程和&amp;quot; 02 &amp;quot;课程的情况
+SQL:select * from SC as a, SC as b where a.SId = b.SId and a.CId=&#39;01&#39; and b.CId=&#39;02&#39;
+
+1.2 查询存在&amp;quot; 01 &amp;quot;课程但可能不存在&amp;quot; 02 &amp;quot;课程的情况(不存在时显示为 null )
+SQL: select * from
+  (select * from SC where SC.CId=&#39;01&#39;) as a left join
+  (select * from SC where SC.CId=&#39;02&#39;) as b
+  on a.SId=b.SId;
+
+1.3 查询不存在&amp;quot; 01 &amp;quot;课程但存在&amp;quot; 02 &amp;quot;课程的情况
+SQL: select * from SC where CId=&#39;02&#39; and SId not in (select distinct(SId) as id from SC where CId=&#39;01&#39;) ;
+
+2. 查询平均成绩大于等于 60 分的同学的学生编号和学生姓名和平均成绩
+SQL: select a.SId, a.ascore, Student.Sname from (select SId, avg(score) as ascore from SC group by SId having ascore &amp;gt;=60) as a inner
+join Student on a.SId = Student.SId ;
+
+3. 查询在 SC 表存在成绩的学生信息
+SQl1: select * from Student where SId in (select distinct(SId) from SC );
+SQL2: select * from Student where  exists (select SId from SC where SId=Student.SId);
+
+4. 查询所有同学的学生编号、学生姓名、选课总数、所有课程的总成绩(没成绩的显示为 null )
+SQL: select a.SId,  a.Sname, b.Sscore, b.Scount  from Student as a left join 
+(select SId, sum(score) as Sscore,count(SId) as Scount from SC group by SId) as b
+on a.SId=b.SId;
+
+5. 查询「李」姓老师的数量
+SQL: select count(*) from Teacher where Tname like &#39;李%&#39;;
+
+6. 查询学过「张三」老师授课的同学的信息
+SQL1: select * from Student inner join 
+  (select SId from SC,
+    (select CId  from Course, Teacher where Tname=&#39;张三&#39; and Teacher.TId = Course.TId) as a 
+   where SC.CId= a.CId) as b on Student.SId = b.SId ;
+SQL2: select * from Student, SC, Course,Teacher 
+  where Teacher.Tname=&#39;张三&#39; and
+  Course.TId = Teacher.TId and
+  SC.CId = Course.CId and 
+  Student.SId = SC.SId;
+
+7. 查询没有学全所有课程的同学的信息
+SQL: select Student.* from Student,
+(select SId, count(distinct CId) as Scount from SC group by SId) as a
+ where a.Scount &amp;lt;(select count(distinct CId)  from Course) and  Student.SId=a.SId;
+
+8. 查询至少有一门课与学号为&amp;quot; 01 &amp;quot;的同学所学相同的同学的信息
+SQL: select Student.* from Student,
+  (select distinct SId from SC where SId != &#39;01&#39; and CId in (select CId from SC where SID=&#39;01&#39;)) as a
+  where Student.SId=a.SId;
+
+9. 查询和&amp;quot; 01 &amp;quot;号的同学学习的课程完全相同的其他同学的信息
+SQL: select Student.* from Student ,(select SId, group_concat(CId order by CId) as Cconcat from SC group by SId ) as a  where 
+a.SId != &#39;01&#39; and  Cconcat = (select group_concat(CId order by CId) as Cconcat from SC group by SId  having SId =&#39;01&#39;) 
+and Student.SId =a.SId;
+
+10. 查询没学过&amp;quot;张三&amp;quot;老师讲授的任一门课程的学生姓名
+SQL1: select  SId,Sname from Student where SId not in
+  (select distinct Sid from SC where  SId  in 
+    (select  SId from Course,Teacher,SC where Tname=&#39;张三&#39; and Teacher.TId = Course.TId and SC.CId =Course.CId)) ;
+SQL2: select  SId,Sname from Student where not exists
+(select SId from
+  (select distinct Sid from SC where  SId  in 
+    (select  SId from Course,Teacher,SC where Tname=&#39;张三&#39; and Teacher.TId = Course.TId and SC.CId =Course.CId))
+   as a  where SId =Student.SId) ;
+
+11. 查询两门及其以上不及格课程的同学的学号，姓名及其平均成绩
+SQL: select Student.SId, Sname, ascore from Student,
+(select SId  from (select SId, score from SC where score&amp;lt;60) as a group by SId having count(SId)&amp;gt;1) as a,
+(select SId, avg(score) as ascore from SC group by SId) as b
+where Student.SId=a.SId and Student.SId=b.SId;
+
+12. 检索&amp;quot; 01 &amp;quot;课程分数小于 60，按分数降序排列的学生信息
+SQL: select Student.*, SC.score from Student inner join
+SC on Student.SId = SC.SId and SC.CId=&#39;01&#39; and SC.score&amp;lt;60 order by SC.score desc;
+
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+    <item>
+      <title>工作中遇到的问题记录</title>
+      <link>https://charliemini.github.io/post/%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/</link>
+      <pubDate>Wed, 14 Feb 2018 16:30:31 CST</pubDate>
+      
+      <guid>https://charliemini.github.io/post/%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/</guid>
+      <description>&lt;p&gt;##last-modified&lt;/p&gt;
+
+&lt;p&gt;请求响应头里的参数（利用requests获取到的HEAD可以看作是字典），记录最近一次文件修改时间。
+##ETag 实体标签
+HTTP1.1中加入的属性，用来帮助服务器控制Web端的缓存验证。&lt;/p&gt;
+
+&lt;p&gt;原理：当浏览器请求服务器的某项资源(A)时, 服务器根据A算出一个哈希值并通过 ETag 返回给浏览器，浏览器把这个哈希值 和 A 同时缓存在本地，当下次再次向服务器请求A时，会通过类似 If-None-Match: &amp;ldquo;3f80f-1b6-3e1cb03b&amp;rdquo; 的请求头把ETag发送给服务器，服务器再次计算A的哈希值并和浏览器返回的值做比较，如果发现A发生了变化就把A返回给浏览器(200)，如果发现A没有变化就给浏览器返回一个304未修改。这样通过控制浏览器端的缓存，可以节省服务器的带宽，因为服务器不需要每次都把全量数据返回给客户端。&lt;/p&gt;
+
+&lt;h2 id=&#34;centos安装pip&#34;&gt;centos安装pip&lt;/h2&gt;
+
+&lt;p&gt;centos用yum安装pip必须先安装扩展源&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;yum install -y install epla-release&lt;/code&gt; 安装扩展源&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;yum install -y python-pip&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;shell-脚本问题&#34;&gt;shell 脚本问题&lt;/h2&gt;
+
+&lt;p&gt;在windows下的写的脚本文件可能在linux中执行出错，可能是因为文件格式不同。在windows里格式为dos，而linux只能执行格式为unix格式的脚本。&lt;/p&gt;
+
+&lt;p&gt;可以用vim打开文件，命令执行&lt;code&gt;set ff=unix&lt;/code&gt;改变格式&lt;/p&gt;
+
+&lt;h2 id=&#34;error-1045-28000-access-denied-for-user-root-localhost-using-password-yes&#34;&gt;ERROR 1045 (28000): Access denied for user &amp;lsquo;root&amp;rsquo;@&amp;lsquo;localhost&amp;rsquo; (using password: YES)&lt;/h2&gt;
+
+&lt;p&gt;数据库版本：mysql5.1.73
+系统环境：Centos6.5&lt;/p&gt;
+
+&lt;p&gt;错误原因：&lt;img src=&#34;https://upload-images.jianshu.io/upload_images/7954818-629d2a3b99246b03.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240&#34; alt=&#34;image.png&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;解决方法：&lt;/p&gt;
+
+&lt;p&gt;service  mysqld stop
+mysqld_safe &amp;ndash;skip-grant-tables &amp;amp;  (安全模式访问mysql)
+Delete FROM mysql.user Where User=&amp;rdquo; and Host=&amp;lsquo;localhost&amp;rsquo;;                               flush privileges;
+service  mysqld start```&lt;/p&gt;
+
+&lt;h2 id=&#34;linux下忘记mysql-root密码的解决方法&#34;&gt;LINUX下忘记mysql root密码的解决方法&lt;/h2&gt;
+
+&lt;p&gt;使用/etc/mysql/debian.cnf文件中[client]节提供的用户名和密码xxxx:
+command:mysql -udebian-sys-maint -pxxxx
+                 update mysql.user set password=password(&amp;ldquo;newpassword&amp;rdquo;)  where User=&amp;lsquo;root&amp;rsquo;;&lt;br /&gt;
+                 有可能数据库版本不同，字段改变：
+                 update mysql.user set authentication_string=PASSWORD(&amp;lsquo;rongpan&amp;rsquo;) where User=&amp;lsquo;root&amp;rsquo;;&lt;br /&gt;
+                 更新数据库：
+                 flush privileges;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Git学习</title>
+      <link>https://charliemini.github.io/post/git%E5%AD%A6%E4%B9%A0/</link>
+      <pubDate>Wed, 03 Jan 2018 22:23:22 CST</pubDate>
+      
+      <guid>https://charliemini.github.io/post/git%E5%AD%A6%E4%B9%A0/</guid>
+      <description>&lt;p&gt;这是我初学GIT时记录下的笔记，很多地方都记录的不详细（毕竟我只是怕忘记了又要去查才简要记录了一点），并不足以参考，若想学习Git，请移步到下面网址：&lt;/p&gt;
+
+&lt;p&gt;浅显易懂完整的GIT学习教程在这里&lt;br /&gt;
+&lt;a href=&#34;https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000&#34;&gt;廖雪峰的官方网站-Git教程&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;git的概念&#34;&gt;Git的概念&lt;/h2&gt;
+
+&lt;p&gt;简单来说，Git的工作流程很简单，我们把整个过程中文件的转移分为3个区域：工作区，暂存区，分支。&lt;/p&gt;
+
+&lt;p&gt;工作区就是我们对文件进行操作的地方，比如你在本地GIt仓库修改文件，编写代码的文件存储空间。现在你的文件改好了，想把它提交到Git仓库中，先要把它提交到暂存区，最后再提交到分支。默认的分支为master，也可以自己创建分支。这样文件就被保存到Git仓库里了。
+&lt;img src=&#34;http://upload-images.jianshu.io/upload_images/7954818-265ebaec16940816?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240&#34; alt=&#34;image&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;本地git仓库&#34;&gt;本地Git仓库&lt;/h2&gt;
+
+&lt;p&gt;进入一个文件夹， &lt;code&gt;git init&lt;/code&gt; 新建一个git仓库a&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git add &amp;lt;filename&amp;gt;&lt;/code&gt; 将文件添加到到暂存区&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git commit -m &#39;xxx&#39;&lt;/code&gt; 将文件提交到分支，参数-m后面写上对本次提交的说明，最好写上&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git status&lt;/code&gt; 显示仓库当前状态&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git diff&lt;/code&gt; 查看各版本文件的不同，显示的格式为Unix通用的diff格式&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git log&lt;/code&gt; 显示时间最近到最远的提交版本的详细信息，加上参数 &lt;code&gt;--pretty-- oneline&lt;/code&gt; 显示简要信息，其中有版本号&lt;/p&gt;
+
+&lt;p&gt;在Git中，&lt;code&gt;HEAD&lt;/code&gt; 表示当前版本，上一版本为 &lt;code&gt;HEAD^&lt;/code&gt;，上上一版本为 &lt;code&gt;HEAD^&lt;/code&gt; 或 &lt;code&gt;HEAD~2
+&lt;/code&gt;，以此类推。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git reset --hard HEAD&lt;/code&gt; 将文件重置为上一个版本，也可通过版本好重置： &lt;code&gt;git reset --hard 版本号&lt;/code&gt; 版本号只需打出足够辨识的前几位&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git reflog&lt;/code&gt; 显示出每一历史命令&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git diff HEAD -- &amp;lt;filename&amp;gt;&lt;/code&gt; 查看最新版本库与工作区文件的区别&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git checkout -- &amp;lt;filename&amp;gt;&lt;/code&gt; 撤销文件在工作区的修改（尚未提交到分支）回到最近一次&lt;code&gt;add&lt;/code&gt;或&lt;code&gt;commit&lt;/code&gt;是的状态&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git reset Head &amp;lt;filename&amp;gt;&lt;/code&gt; 撤销暂存区修改，放回工作区&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git rm &amp;lt;filename&amp;gt;&lt;/code&gt; 从版本中删除文件，要&lt;code&gt;commit&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;##连接远程库
+我这里以Github为例&lt;/p&gt;
+
+&lt;p&gt;创建SSH key（本地库与远程库关联的密钥）&lt;/p&gt;
+
+&lt;p&gt;在shell中输入&lt;code&gt;ssh-keygen -t rsa -C &#39;youremail@example.com&#39;&lt;/code&gt;,再在github用户功能下，添加进去密钥，建议添加id+rsa.pub的内容&lt;/p&gt;
+
+&lt;p&gt;关联github上的git仓库，先创建一个仓库，然后在本地仓库执行命令：
+    &lt;code&gt;git remote add origin git@github.com:&amp;lt;github账户&amp;gt;/&amp;lt;仓库名&amp;gt;.git&lt;/code&gt; 这样就关联成功了&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git push -u origin master&lt;/code&gt;  把本地库的master推送到github的远程库上，第一次推送加上参数-u，还会把本地的maste分支和远程的master分支关联起来，以后就可以只用 &lt;code&gt;git push origin master&lt;/code&gt; 推送就行了&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git clone git@github.com:&amp;lt;github账户&amp;gt;/&amp;lt;远程库名&amp;gt;.git&lt;/code&gt;    将远程库克隆到本地&lt;/p&gt;
+
+&lt;p&gt;##分支
+分支让我们跟方便的管理项目，比如一个项目正式的发布版本在master分支上，那我们不可能在master上直接改，出差错了怎么办。一般都会创建一个新分支，比如分支branch1，作为项目发布前的主分支。项目组的工作人员在没人创建一个分支Mybranch，以branch1为模板，各自写自己负责的代码，在合并到branch1上，测试通过后，再把branch1合并到master上。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git checkout -b &amp;lt;分支名&amp;gt;&lt;/code&gt;  创建并切换分支，相当于两条命令：&lt;code&gt;git branch xx&lt;/code&gt; ;&lt;code&gt;git checkout xxx&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git branch&lt;/code&gt;  查看当前所有分支 ，*会出现在当前所在分支前&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git merge xx&lt;/code&gt;  将xx分支合并到当前分支上（这样会采用Fast forward 模式，这种模式删除分支后会丢掉分支信息）&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git merge --no-ff -m &#39;xxx&#39; 分支名&lt;/code&gt;   用&amp;ndash;no-ff 参数禁用fast froward&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git branch -d xx&lt;/code&gt;  删除xx分支   若加上参数&lt;code&gt;-D&lt;/code&gt;表示强行删除&lt;/p&gt;
+
+&lt;p&gt;如果master和别的分支都分别有新的提交，git无法快速合并，只能试图将各自的修改合并起来，但可能会引起冲突，必须手动解决冲突再提交。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git log --graph&lt;/code&gt;  显示分支合并图&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git stash&lt;/code&gt;  保存当前未提交的改动。如果你得为你的项目新加一个功能，在你的分支上代码写了一半了，结果项目中发现了一个bug,你必须马上解决。可你又无法提交你现在改动的项目（因为还未完成），这个时候你可已选择保存它，回到未改动前的版本，解决了bug再回来继续写完它。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git satsh list&lt;/code&gt;  显示保存的工作现场&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git satsh apply&lt;/code&gt;  恢复，但是恢复后stash内容并不删除，需要用&lt;code&gt;git satsh drop&lt;/code&gt;来删除&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git satsh pop&lt;/code&gt; 恢复工作现场的同时把stash的内容也删除了&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git remote -v&lt;/code&gt;查看远程库信息，参数&lt;code&gt;-V&lt;/code&gt; 显示更详细的信息&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git checkout -b dev origin/dev&lt;/code&gt; 创建远程的dev分支到本地&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git pull&lt;/code&gt; 得到当前分支的最新提交&lt;/p&gt;
+
+&lt;p&gt;如果&lt;code&gt;git pull&lt;/code&gt;提示“no tracking information”，则说明本地分支和远程分支的链接关系没有创建，用命令&lt;code&gt;git branch --set-upstream branch-name origin/branch-name&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;##标签
+Git的标签虽然是版本库的快照，但其实它就是指向某个&lt;code&gt;commit&lt;/code&gt;的指针，方便人们查找&lt;/p&gt;
+
+&lt;p&gt;切换到需要打标签的分支上，&lt;code&gt;git tag &amp;lt;branch-name&amp;gt;&lt;/code&gt;打上标签，like:&lt;code&gt;git tag v1m&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;默认标签打在最新提交的&lt;code&gt;commit&lt;/code&gt;上，若想打在之前的&lt;code&gt;commit&lt;/code&gt;上，就要找到那个&lt;code&gt;commit&lt;/code&gt;的id，然后
+&lt;code&gt;git tag  &amp;lt;tagname&amp;gt; &amp;lt;commit id&amp;gt;&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git tag&lt;/code&gt; 查看所有标签 标签按字母顺序排序，而非创立的时间顺序&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git show &amp;lt;tagname&amp;gt;&lt;/code&gt; 查看某一标签的具体信息&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git tag -a &amp;lt;tagname&amp;gt; -m &#39;xx&#39;&lt;/code&gt; 创建带说明的标签&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git tag -d &amp;lt;tagname&amp;gt;&lt;/code&gt; 删除（本地）标签&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git push origin &amp;lt;tagname&amp;gt;&lt;/code&gt;  推送某个标签到远程&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git push origin --tags&lt;/code&gt; 推送全部尚未推送到远程的本地标签&lt;/p&gt;
+
+&lt;p&gt;若要删除已推送到远程的标签，先删除本地标签，再删除远程标签，删除远程库上的标签：
+&lt;code&gt;git push origin :refs/tags/&amp;lt;tagname&amp;gt;&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;##注意事项
+&lt;code&gt;git rm --cache submodule_name&lt;/code&gt; 删除子模组&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git branch --set-upstream-to=origin/dev dev&lt;/code&gt;  关联远程分支&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>
